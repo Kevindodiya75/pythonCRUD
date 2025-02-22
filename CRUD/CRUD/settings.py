@@ -54,9 +54,9 @@ ROOT_URLCONF = 'CRUD.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+          'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],  # or include any extra directories here
+        'APP_DIRS': True,  # This tells Django to look for a "templates" folder in each app
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',

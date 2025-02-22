@@ -1,8 +1,7 @@
+# CRUDapp/admin.py
 from django.contrib import admin
-from .models import Student
+from CRUDapp.data.model.models import Student
 
 @admin.register(Student)
-class studentAdmin(admin.ModelAdmin):
-    list_display = ["id","name","email"]
-
-# Register your models here.
+class StudentAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "email"]
