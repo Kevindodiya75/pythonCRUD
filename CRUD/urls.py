@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from CRUD.presentation.views.student_views import index
+from CRUD.presentation.views.student_view import index
 
 
 urlpatterns = [
