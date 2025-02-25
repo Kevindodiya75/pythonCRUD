@@ -1,0 +1,19 @@
+{
+    "name": "Django CRUD Development Container",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "ms-python.python",
+        "batisteo.vscode-django",
+        "ms-azuretools.vscode-docker"
+    ],
+    "postCreateCommand": "python manage.py migrate",
+    "forwardPorts": [
+        8000
+    ]
+}
