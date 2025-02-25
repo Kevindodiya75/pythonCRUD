@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from CRUD.domain.usecase.usecase import (
+from CRUD.domain.usecases.student_usecase import (
     create_student_usecase,
     update_student_usecase,
     delete_student_usecase,
     list_students_usecase
 )
-from CRUD.data.model.models import Student  # For catching DoesNotExist exceptions
+from CRUD.data.models.student_model import student_model  # For catching DoesNotExist exceptions
 
 def index(request):
     if request.method == 'POST':
@@ -27,7 +27,7 @@ def index(request):
             try:
                 update_student_usecase(student_id, name, email)
                 messages.success(request, 'Student updated successfully.')
-            except Student.DoesNotExist:
+            except student_model.DoesNotExist:
                 messages.error(request, 'Student not found.')
             return redirect('index')
         
@@ -36,13 +36,13 @@ def index(request):
             try:
                 delete_student_usecase(student_id)
                 messages.success(request, 'Student deleted successfully.')
-            except Student.DoesNotExist:
+            except student_model.DoesNotExist:
                 messages.error(request, 'Student not found.')
             return redirect('index')
         
         elif 'search' in request.POST:
             query = request.POST.get('query', '')
-            students = Student.objects.filter(name__icontains=query)
+            students = student_model.objects.filter(name__icontains=query)
             context = {
                 'students': students,
                 'search_query': query,

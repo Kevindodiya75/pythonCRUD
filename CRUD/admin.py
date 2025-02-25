@@ -1,4 +1,4 @@
 from django.contrib import admin
-from CRUD.data.model.models import Student
+from CRUD.data.models.student_model import student_model
 
-admin.site.register(Student)
+admin.site.register(student_model)

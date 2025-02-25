@@ -6,4 +6,4 @@ class CRUDConfig(AppConfig):
 
     def ready(self):
         # Import the model so it gets registered with the migration system
-        import CRUD.data.model.models
+        import CRUD.data.models.student_model 

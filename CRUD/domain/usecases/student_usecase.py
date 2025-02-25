@@ -1,11 +1,11 @@
-from CRUD.data.repositories.repositories import (
+from CRUD.data.repositories.student_repositorie import (
     create_student,
     update_student,
     delete_student,
     get_all_students,
     get_student_by_id
 )
-from CRUD.domain.entity import StudentEntity
+from CRUD.domain.entities.student_entity import StudentEntity
 
 def create_student_usecase(name, email):
     student = create_student(name, email)
