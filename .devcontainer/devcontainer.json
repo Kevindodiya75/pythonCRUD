@@ -1,20 +1,19 @@
 {
-    "name": "Django CRUD Development Container",
-    "dockerComposeFile": [
-        "./docker-compose.yml"
+    "name": "Django CRUD Project",
+    "dockerFile": "Dockerfile",
+    "context": "..",
+    "appPort": [
+        8000
     ],
-    "service": "web",
-    "workspaceFolder": "/app",
+    "postCreateCommand": "python manage.py migrate",
     "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "terminal.integrated.shell.linux": "/bin/bash"
     },
     "extensions": [
-        "ms-python.python",
-        "batisteo.vscode-django",
-        "ms-azuretools.vscode-docker"
+        "ms-python.python"
     ],
     "forwardPorts": [
         8000
     ],
-    "postCreateCommand": "python manage.py migrate"
+    "remoteUser": "root"
 }

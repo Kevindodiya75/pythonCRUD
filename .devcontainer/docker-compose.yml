@@ -1,21 +1,15 @@
-version: "3.9"
+version: '3.8'
 
 services:
   web:
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ..:/app
+      - .:/workspace
     ports:
       - "8000:8000"
     depends_on:
       - db
-    environment:
-      - DATABASE_NAME=mydatabase
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=crud
-      - DATABASE_HOST=db
 
   db:
     image: postgres:13
@@ -25,8 +19,3 @@ services:
       POSTGRES_PASSWORD: crud
     ports:
       - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
-volumes:
-  pgdata:

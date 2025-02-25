@@ -15,8 +15,7 @@ SECRET_KEY = 'django-insecure-!dr53=jtctnreo%_n$c4s)u%qe(5tx3=&w*(18!=2x*699ecj)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*'] 
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -64,14 +63,14 @@ WSGI_APPLICATION = 'CRUD.wsgi.application'
 
 # Database
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'mydatabase',        # The name of the database you created
-            'USER': 'postgres',            # Your PostgreSQL username
-            'PASSWORD': 'crud',          # Your PostgreSQL password
-            'HOST': 'localhost',         # Use your server's address if not local
-            'PORT': '5432',              # The default PostgreSQL port
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mydatabase',
+        'USER': 'postgres',
+        'PASSWORD': 'crud',
+        'HOST': 'db',  # Use 'db' as the host name (Docker service name)
+        'PORT': '5432',
+    }
 }
 
 # Password validation
