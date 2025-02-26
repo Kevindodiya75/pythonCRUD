@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: crud
+    ports:
+      - "5433:5432"
