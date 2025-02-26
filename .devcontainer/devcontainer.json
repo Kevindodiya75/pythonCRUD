@@ -1,19 +1,35 @@
 {
-    "name": "Django CRUD Project",
-    "dockerFile": "Dockerfile",
-    "context": "..",
-    "appPort": [
-        8000
-    ],
-    "postCreateCommand": "python manage.py migrate",
-    "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
-    },
-    "extensions": [
-        "ms-python.python"
-    ],
-    "forwardPorts": [
-        8000
-    ],
-    "remoteUser": "root"
+	"image": "mcr.microsoft.com/devcontainers/universal:2",
+	"hostRequirements": {
+		"cpus": 4
+	},
+	"waitFor": "onCreateCommand",
+	"updateContentCommand": "pip install -r requirements.txt && python manage.py migrate",
+	"postCreateCommand": "cp .env.example .env",
+	"postAttachCommand": {
+		"server": "python manage.py runserver"
+	},
+	"customizations": {
+		"codespaces": {
+			"openFiles": [
+				"CRUD/templates/index.html"
+			]
+		},
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"batisteo.vscode-django",
+				"ms-azuretools.vscode-docker"
+			]
+		}
+	},
+	"portsAttributes": {
+		"8000": {
+			"label": "Application",
+			"onAutoForward": "openPreview"
+		}
+	},
+	"forwardPorts": [
+		8000
+	]
 }

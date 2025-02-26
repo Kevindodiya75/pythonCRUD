@@ -1,4 +1,4 @@
-from CRUD.data.repositories.student_repositorie import (
+from CRUD.data.repositories.student_repository import (
     create_student,
     update_student,
     delete_student,
