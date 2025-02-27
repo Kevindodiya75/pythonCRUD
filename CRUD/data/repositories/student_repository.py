@@ -9,13 +9,15 @@ def get_student_by_id(student_id):
 def create_student(name, email):
     return student_model.objects.create(name=name, email=email)
 
-def update_student(student_id, name, email):
+def update_student(student_id, name, email, coursename):
     student = student_model.objects.get(id=student_id)
-    student_model.name = name
-    student_model.email = email
-    student_model.save()
+    student.name = name
+    student.email = email
+    # student.coursename = coursename
+    student.save()
     return student
+
 
 def delete_student(student_id):
     student = student_model.objects.get(id=student_id)
-    student_model.delete()
+    student.delete()  # Call delete on the instance, not the class

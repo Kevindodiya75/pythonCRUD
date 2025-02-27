@@ -8,6 +8,7 @@ from CRUD.domain.usecases.student_usecase import (
 )
 from CRUD.data.models.student_model import student_model  # For catching DoesNotExist exceptions
 
+
 def index(request):
     if request.method == 'POST':
         if 'create' in request.POST:
