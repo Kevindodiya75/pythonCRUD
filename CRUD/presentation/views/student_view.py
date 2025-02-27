@@ -7,6 +7,7 @@ from CRUD.domain.usecases.student_usecase import (
     list_students_usecase
 )
 from CRUD.data.models.student_model import student_model  # For catching DoesNotExist exceptions
+from CRUD.domain.usecases.course_usecase import list_courses_usecase 
 
 
 def index(request):
@@ -51,8 +52,11 @@ def index(request):
             return render(request, 'index.html', context)
     
     students = list_students_usecase()
+    courses = list_courses_usecase()
+    
     context = {
         'students': students,
+        'courses': courses,
         'search_query': '',
     }
     return render(request, 'index.html', context)
