@@ -1,4 +1,4 @@
-from CRUD.data.repositories.course_repository import (
+from CRUD.domain.repositories.course_repository import (
     create_course,
     update_course,
     delete_course,
