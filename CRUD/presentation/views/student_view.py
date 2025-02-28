@@ -6,28 +6,29 @@ from CRUD.domain.usecases.student_usecase import (
     delete_student_usecase,
     list_students_usecase
 )
-from CRUD.data.models.student_model import student_model  # For catching DoesNotExist exceptions
+from CRUD.data.models.student_model import student_model 
 from CRUD.domain.usecases.course_usecase import list_courses_usecase 
-
 
 def index(request):
     if request.method == 'POST':
         if 'create' in request.POST:
             name = request.POST.get('name')
             email = request.POST.get('email')
-            if name and email:
-                create_student_usecase(name, email)
+            course_id = request.POST.get('course')
+            if name and email and course_id:
+                create_student_usecase(name, email, course_id)
                 messages.success(request, 'Student added successfully.')
             else:
-                messages.error(request, 'Both name and email are required.')
+                messages.error(request, 'All fields are required.')
             return redirect('index')
         
         elif 'update' in request.POST:
             student_id = request.POST.get('id')
             name = request.POST.get('name')
             email = request.POST.get('email')
+            course_id = request.POST.get('course')
             try:
-                update_student_usecase(student_id, name, email)
+                update_student_usecase(student_id, name, email, course_id)
                 messages.success(request, 'Student updated successfully.')
             except student_model.DoesNotExist:
                 messages.error(request, 'Student not found.')

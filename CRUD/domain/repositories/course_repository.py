@@ -1,5 +1,3 @@
-# CRUD/domain/repositories/student_repository.py
-
 import CRUD.data.repositories.course_repository as course_repo
 
 def get_all_course():

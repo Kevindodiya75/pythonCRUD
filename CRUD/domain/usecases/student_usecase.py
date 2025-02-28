@@ -1,21 +1,19 @@
-# CRUD/domain/usecases/student_usecase.py
-
 from CRUD.domain.repositories.student_repository import (
     create_student,
     update_student,
     delete_student,
     get_all_students,
-    get_student_by_id,
+    get_student_by_id
 )
 from CRUD.domain.entities.student_entity import StudentEntity
 
-def create_student_usecase(name, email):
-    student = create_student(name, email)
-    return StudentEntity(id=student.id, name=student.name, email=student.email)
+def create_student_usecase(name, email, course_id):
+    student = create_student(name, email, course_id)
+    return StudentEntity(id=student.id, name=student.name, email=student.email, course=student.course)
 
-def update_student_usecase(student_id, name, email):
-    student = update_student(student_id, name, email)
-    return StudentEntity(id=student.id, name=student.name, email=student.email)
+def update_student_usecase(student_id, name, email, course_id):
+    student = update_student(student_id, name, email, course_id)
+    return StudentEntity(id=student.id, name=student.name, email=student.email, course=student.course)
 
 def delete_student_usecase(student_id):
     delete_student(student_id)
@@ -23,8 +21,11 @@ def delete_student_usecase(student_id):
 
 def list_students_usecase():
     students = get_all_students()
-    return [StudentEntity(id=student.id, name=student.name, email=student.email) for student in students]
+    return [
+        StudentEntity(id=student.id, name=student.name, email=student.email, course=student.course)
+        for student in students
+    ]
 
 def get_student_usecase(student_id):
     student = get_student_by_id(student_id)
-    return StudentEntity(id=student.id, name=student.name, email=student.email)
+    return StudentEntity(id=student.id, name=student.name, email=student.email, course=student.course)
