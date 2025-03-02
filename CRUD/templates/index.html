@@ -23,10 +23,12 @@
 
 <body class="bg-light">
     <div class="container mt-5 p-5 rounded shadow bg-white">
-        <!-- Top Navigation: Students and Courses -->
+        <!-- Top Navigation: Students, Courses, and Logout -->
         <div class="d-flex justify-content-end mb-3">
             <a href="{% url 'index' %}" class="btn btn-outline-primary me-2">Students</a>
-            <a href="{% url 'course' %}" class="btn btn-outline-secondary">Courses</a>
+            <a href="{% url 'course' %}" class="btn btn-outline-secondary me-2">Courses</a>
+            <!-- Logout Button: triggers JavaScript to clear localStorage and redirect -->
+            <a href="#" class="btn btn-danger" id="logoutButton">Logout</a>
         </div>
 
         {% if messages %}
@@ -199,6 +201,18 @@
             </form>
         </div>
     </div>
+
+    <!-- JavaScript block: Attach logout functionality -->
+    <script>
+        document.getElementById("logoutButton").addEventListener("click", function () {
+            // Remove user data from localStorage
+            localStorage.removeItem("user_id");
+            localStorage.removeItem("username");
+            localStorage.removeItem("email");
+            // Redirect to the login page
+            window.location.href = "{% url 'login' %}";
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
