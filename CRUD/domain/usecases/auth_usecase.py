@@ -11,7 +11,7 @@ from django.contrib.auth.hashers import check_password
 def register_user(email, username, password, userrole):
     if get_user_by_email(email):
         raise Exception("User with this email already exists.")
-    user = create_user(email, username, password, userrole)  # Make sure username is passed here
+    user = create_user(email, username, password, userrole)  
     return AuthEntity(
         id=user.id, 
         email=user.email, 
@@ -26,7 +26,7 @@ def login_user(email, password):
         return AuthEntity(
             id=user.id,
             email=user.email,
-            username=user.username,  # Pass the username here
+            username=user.username, 
             password=user.password,
             userrole=user.userrole
         )

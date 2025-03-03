@@ -8,3 +8,4 @@ class StudentEntity:
     name: str = ""
     email: str = ""
     course: Optional[course_model] = None
+    created_by: Optional[int] = None  

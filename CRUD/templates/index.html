@@ -23,11 +23,10 @@
 
 <body class="bg-light">
     <div class="container mt-5 p-5 rounded shadow bg-white">
-        <!-- Top Navigation: Students, Courses, and Logout -->
         <div class="d-flex justify-content-end mb-3">
             <a href="{% url 'index' %}" class="btn btn-outline-primary me-2">Students</a>
             <a href="{% url 'course' %}" class="btn btn-outline-secondary me-2">Courses</a>
-            <!-- Logout Button: triggers JavaScript to clear localStorage and redirect -->
+            <a href="{% url 'teacher_index' %}" class="btn btn-outline-success me-2">Teachers</a>
             <a href="#" class="btn btn-danger" id="logoutButton">Logout</a>
         </div>
 
@@ -88,7 +87,6 @@
                     </td>
                 </tr>
 
-                <!-- Update student modal -->
                 <div class="modal fade" id="updatestudentModal_{{ student.id }}" tabindex="-1"
                     aria-labelledby="updatestudentModalLabel_{{ student.id }}" aria-hidden="true">
                     <div class="modal-dialog">
@@ -137,7 +135,6 @@
                     </div>
                 </div>
 
-                <!-- Delete student modal -->
                 <div class="modal fade" id="deletestudentModal_{{ student.id }}" data-bs-backdrop="static"
                     data-bs-keyboard="false" tabindex="-1" aria-labelledby="deletestudentModalLabel_{{ student.id }}"
                     aria-hidden="true">
@@ -163,7 +160,6 @@
         </table>
     </div>
 
-    <!-- Add new student modal -->
     <div class="modal fade" id="addnewstudentModal" tabindex="-1" aria-labelledby="addnewstudentModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -202,14 +198,11 @@
         </div>
     </div>
 
-    <!-- JavaScript block: Attach logout functionality -->
     <script>
         document.getElementById("logoutButton").addEventListener("click", function () {
-            // Remove user data from localStorage
             localStorage.removeItem("user_id");
             localStorage.removeItem("username");
             localStorage.removeItem("email");
-            // Redirect to the login page
             window.location.href = "{% url 'login' %}";
         });
     </script>

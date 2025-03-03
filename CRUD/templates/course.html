@@ -23,10 +23,11 @@
 
 <body class="bg-light">
     <div class="container mt-5 p-5 rounded shadow bg-white">
-        <!-- Top Navigation: Allows switching between Students and Courses -->
         <div class="d-flex justify-content-end mb-3">
             <a href="{% url 'index' %}" class="btn btn-outline-primary me-2">Students</a>
             <a href="{% url 'course' %}" class="btn btn-outline-secondary">Courses</a>
+            <a href="{% url 'teacher_index' %}" class="btn btn-outline-success">Teachers</a>
+
         </div>
 
         {% if messages %}
@@ -71,7 +72,6 @@
                             class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></a>
                     </td>
                 </tr>
-                <!-- Update course modal -->
                 <div class="modal fade" id="updatecourseModal_{{ course.id }}" tabindex="-1"
                     aria-labelledby="updatecourseModalLabel_{{ course.id }}" aria-hidden="true">
                     <div class="modal-dialog">
@@ -101,7 +101,6 @@
                         </form>
                     </div>
                 </div>
-                <!-- Delete course modal -->
                 <div class="modal fade" id="deletecourseModal_{{ course.id }}" data-bs-backdrop="static"
                     data-bs-keyboard="false" tabindex="-1" aria-labelledby="deletecourseModalLabel_{{ course.id }}"
                     aria-hidden="true">
@@ -127,7 +126,6 @@
         </table>
     </div>
 
-    <!-- Add new course modal -->
     <div class="modal fade" id="addnewcourseModal" tabindex="-1" aria-labelledby="addnewcourseModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">

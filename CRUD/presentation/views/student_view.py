@@ -10,13 +10,18 @@ from CRUD.data.models.student_model import student_model
 from CRUD.domain.usecases.course_usecase import list_courses_usecase 
 
 def index(request):
+    user_id = request.session.get("user_id")
+    if not user_id:
+        messages.error(request, "You must be logged in to view this page.")
+        return redirect("login")
+
     if request.method == 'POST':
         if 'create' in request.POST:
             name = request.POST.get('name')
             email = request.POST.get('email')
             course_id = request.POST.get('course')
             if name and email and course_id:
-                create_student_usecase(name, email, course_id)
+                create_student_usecase(name, email, course_id, user_id)
                 messages.success(request, 'Student added successfully.')
             else:
                 messages.error(request, 'All fields are required.')
@@ -45,16 +50,16 @@ def index(request):
         
         elif 'search' in request.POST:
             query = request.POST.get('query', '')
-            students = student_model.objects.filter(name__icontains=query)
+            students = student_model.objects.filter(created_by=user_id, name__icontains=query)
             context = {
                 'students': students,
                 'search_query': query,
             }
             return render(request, 'index.html', context)
     
-    students = list_students_usecase()
+    students = list_students_usecase(user_id)
     courses = list_courses_usecase()
-    
+
     context = {
         'students': students,
         'courses': courses,

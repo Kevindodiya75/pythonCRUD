@@ -12,7 +12,7 @@ def login_view(request):
             user = login_user(email, password)
             request.session["user_id"] = user.id
             request.session["email"] = user.email
-            request.session["username"] = user.username  # Save the username
+            request.session["username"] = user.username  
             request.session["userrole"] = user.userrole
             messages.success(request, "Login successful.")
             return redirect("index")
@@ -25,15 +25,15 @@ def login_view(request):
 def register_view(request):
     if request.method == "POST":
         email = request.POST.get("email")
-        username = request.POST.get("username")  # Capturing the username
-        role = request.POST.get("role")          # Capturing the role
+        username = request.POST.get("username") 
+        role = request.POST.get("role")          
         password1 = request.POST.get("password1")
         password2 = request.POST.get("password2")
         if password1 != password2:
             messages.error(request, "Passwords do not match.")
             return render(request, "register.html")
         try:
-            register_user(email, username, password1, role)  # Passing username to use case
+            register_user(email, username, password1, role) 
             messages.success(request, "Registration successful. Please log in.")
             return redirect("login")
         except Exception as e:
