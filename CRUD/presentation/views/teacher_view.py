@@ -9,12 +9,28 @@ from CRUD.domain.usecases.teacher_usecase import (
 from CRUD.data.models.teacher_model import teacher_model
 
 def teacher_index(request):
+    userrole = request.session.get("userrole")
     user_id = request.session.get("user_id")
     if not user_id:
         messages.error(request, "You must be logged in to view this page.")
         return redirect("login")
 
     if request.method == "POST":
+        # Allow search for everyone
+        if "search" in request.POST:
+            query = request.POST.get("query", "")
+            teachers = teacher_model.objects.filter(name__icontains=query, created_by_id=user_id)
+            context = {
+                "teachers": teachers,
+                "search_query": query,
+            }
+            return render(request, "teacher.html", context)
+
+        # For create, update, or delete, only allow if userrole is "teacher"
+        if userrole != "teacher":
+            messages.error(request, "You are not authorized to modify teacher data.")
+            return redirect("teacher_index")
+
         if "create" in request.POST:
             name = request.POST.get("name")
             email = request.POST.get("email")
@@ -44,14 +60,6 @@ def teacher_index(request):
             except teacher_model.DoesNotExist:
                 messages.error(request, "Teacher not found.")
             return redirect("teacher_index")
-        elif "search" in request.POST:
-            query = request.POST.get("query", "")
-            teachers = teacher_model.objects.filter(name__icontains=query, created_by_id=user_id)
-            context = {
-                "teachers": teachers,
-                "search_query": query,
-            }
-            return render(request, "teacher.html", context)
 
     teachers = list_teachers_usecase(user_id)
     context = {"teachers": teachers, "search_query": ""}

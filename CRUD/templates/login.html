@@ -52,17 +52,7 @@
             Don't have an account? <a href="{% url 'register' %}">Register here</a>.
         </p>
     </div>
-    <script>
-        {% if request.session.user_id %}
-        localStorage.setItem('user_id', '{{ request.session.user_id }}');
-        {% endif %}
-        {% if request.session.userrole %}
-        localStorage.setItem('userrole', '{{ request.session.userrole }}');
-        {% endif %}
-        {% if request.session.email %}
-        localStorage.setItem('email', '{{ request.session.email }}');
-        {% endif %}
-    </script>
+
 
 
 

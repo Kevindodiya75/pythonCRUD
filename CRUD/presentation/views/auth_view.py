@@ -2,8 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from CRUD.domain.usecases.auth_usecase import login_user, register_user
 
-
-
 def login_view(request):
     if request.method == "POST":
         email = request.POST.get("email")
@@ -13,13 +11,16 @@ def login_view(request):
             request.session["user_id"] = user.id
             request.session["email"] = user.email
             request.session["username"] = user.username  
-            request.session["userrole"] = user.userrole
+            request.session["userrole"] = user.userrole  
             messages.success(request, "Login successful.")
             return redirect("index")
         except Exception as e:
-            messages.error(request, str(e))
+            # Clear any existing session data on login failure
+            request.session.flush()
+            messages.error(request, str(e))  # Display the error message
+            return render(request, "login.html")
+    # GET request: simply render the login page
     return render(request, "login.html")
-
 
 
 def register_view(request):
@@ -38,6 +39,12 @@ def register_view(request):
             return redirect("login")
         except Exception as e:
             messages.error(request, str(e))
+            return render(request, "register.html")
     return render(request, "register.html")
 
+    
 
+def logout_view(request):
+    request.session.flush()  # Clear the session data
+    messages.success(request, "You have been logged out.")
+    return redirect("login")
