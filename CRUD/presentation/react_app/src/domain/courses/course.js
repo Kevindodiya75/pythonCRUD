@@ -3,7 +3,7 @@ import {
     createCourseApi,
     updateCourseApi,
     deleteCourseApi,
-  } from '../../driven/courses/CourseApi';
+  } from '../../data/courses/course_api';
   
   export const fetchCourses = async () => {
     return await getCoursesApi();

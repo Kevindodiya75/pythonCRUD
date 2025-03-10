@@ -4,7 +4,7 @@ import {
     createTeacherApi,
     updateTeacherApi,
     deleteTeacherApi
-  } from '../../driven/teacher/teacherApi';
+  } from '../../data/teacher/teacher_api';
   
   // Retrieve teachers; you can add business-specific filtering here.
   export const fetchTeachers = async (query = '') => {

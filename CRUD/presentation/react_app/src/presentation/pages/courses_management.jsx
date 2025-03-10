@@ -1,14 +1,13 @@
-// src/design/CoursesManagement.jsx
 import React, { useState, useEffect } from 'react';
-import { fetchCourses, addCourse, modifyCourse, removeCourse } from '../../domain/courses/Course';
-import {getCoursesApi} from "../../driven/courses/CourseApi"
+import { fetchCourses, addCourse, modifyCourse, removeCourse } from '../../domain/courses/course';
+
 const CoursesManagement = () => {
   const [courses, setCourses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [newCourseName, setNewCourseName] = useState('');
   const [updateData, setUpdateData] = useState(null); 
   const [modalMode, setModalMode] = useState(null); 
-  const [message, setMessage] = useState('');
+  const [message,   setMessage] = useState('');
 
   // Load courses from backend
     const loadCourses = async (query = '') => {

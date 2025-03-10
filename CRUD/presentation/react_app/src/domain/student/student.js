@@ -3,7 +3,7 @@ import {
     createStudentApi,
     updateStudentApi,
     deleteStudentApi
-  } from '../../driven/student/studentApi';
+  } from '../../data/student/student_api';
   
  
   export const fetchStudents = async (query = '') => {

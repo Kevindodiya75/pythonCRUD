@@ -1,4 +1,4 @@
-import { loginApi,registerApi } from '../../driven/auth/authApi';
+import { loginApi,registerApi } from '../../data/auth/auth_api';
 
 export const login = async (email, password) => {
   if (!email || !password) {

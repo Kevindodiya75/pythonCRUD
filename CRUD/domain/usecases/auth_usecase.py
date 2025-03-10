@@ -5,7 +5,7 @@ from CRUD.domain.repositories.auth_repository import (
     update_user,
     delete_user,
 )
-from CRUD.domain.entities.auth_entity import AuthEntity
+from CRUD.domain.entities.user_entity import AuthEntity
 from django.contrib.auth.hashers import check_password
 
 def register_user(email, username, password, userrole):
