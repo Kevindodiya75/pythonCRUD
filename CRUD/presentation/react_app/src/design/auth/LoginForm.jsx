@@ -1,20 +1,21 @@
-// src/design/LoginForm.jsx
 import React, { useState } from 'react';
 import { login } from '../../domain/auth/auth';
+import { useNavigate } from 'react-router-dom';
+
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-
+  
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const data = await login(email, password);
-      // For example, store the returned token or user data in localStorage
       localStorage.setItem("user", JSON.stringify(data));
       setMessage("Login successful!");
-      // You might redirect or update app state here
+      navigate("/students");
     } catch (error) {
       setMessage(error.message);
     }

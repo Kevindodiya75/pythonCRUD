@@ -1,11 +1,15 @@
 from django.contrib import admin
-from django.urls import path,include
-from CRUD.presentation.views.react_view import react_app_view
+from django.urls import path, include
+from CRUD.presentation.views.auth_view import login_api, register_api
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', react_app_view, name='index'),  # Use name 'index'
-    path('app/', react_app_view, name='react_app'),
+    # API endpoints for authentication:
+    path('api/auth/login/', login_api, name="api_login"),
+    path('api/auth/register/', register_api, name="api_register"),
+    # Optionally include other URL patterns:
     path('__reload__/', include('django_browser_reload.urls')),
 ]
 

@@ -32,10 +32,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "CRUD.apps.CRUDConfig",  
-    "django_browser_reload",  # Optional: for live reloading during development
+    "django_browser_reload",  
+    "corsheaders"
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -45,16 +47,19 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  
+]
 
 X_FRAME_OPTIONS = "ALLOW-FROM preview.app.github.dev"
 
 ROOT_URLCONF = "CRUD.urls"
 
-# We will use a separate directory (e.g., "templates") for Django templates.
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        # Change 'telplest' to 'templates' if you rename the folder.
         "DIRS": [os.path.join(BASE_DIR, "CRUD", "templates")],
         "APP_DIRS": True,
         "OPTIONS": {

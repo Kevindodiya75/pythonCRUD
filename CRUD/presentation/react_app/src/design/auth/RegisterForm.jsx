@@ -1,6 +1,6 @@
-// src/design/RegisterForm.jsx
 import React, { useState } from 'react';
 import { register } from '../../domain/auth/auth';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
@@ -10,13 +10,14 @@ const RegisterForm = () => {
   const [password2, setPassword2] = useState("");
   const [message, setMessage] = useState("");
 
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     try {
-      // Call the domain layer's register function
       await register(username, email, role, password1, password2);
-      setMessage("Registration successful. Please log in.");
-      // Optionally, redirect to login page or clear the form
+      setMessage("Registration successfully.");
+      navigate("/login");
     } catch (error) {
       setMessage(error.message);
     }

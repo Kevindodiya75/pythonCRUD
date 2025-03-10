@@ -1,50 +1,49 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
+# CRUD/api/views/auth_api.py
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from CRUD.domain.usecases.auth_usecase import login_user, register_user
 
-def login_view(request):
+@csrf_exempt
+def login_api(request):
+  
     if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
         try:
+            data = json.loads(request.body)
+            email = data.get("email")
+            password = data.get("password")
             user = login_user(email, password)
-            request.session["user_id"] = user.id
-            request.session["email"] = user.email
-            request.session["username"] = user.username  
-            request.session["userrole"] = user.userrole  
-            messages.success(request, "Login successful.")
-            return redirect("index")
+            # Return key user details
+            response_data = {
+                "id": user.id,
+                "email": user.email,
+                "username": user.username,
+                "userrole": user.userrole,
+            }
+            return JsonResponse(response_data, status=200)
         except Exception as e:
-            # Clear any existing session data on login failure
-            request.session.flush()
-            messages.error(request, str(e))  # Display the error message
-            return render(request, "login.html")
-    # GET request: simply render the login page
-    return render(request, "login.html")
+            return JsonResponse({"error": str(e)}, status=400)
+    return JsonResponse({"error": "Only POST method allowed"}, status=405)
 
 
-def register_view(request):
+@csrf_exempt
+def register_api(request):
+   
     if request.method == "POST":
-        email = request.POST.get("email")
-        username = request.POST.get("username") 
-        role = request.POST.get("role")          
-        password1 = request.POST.get("password1")
-        password2 = request.POST.get("password2")
-        if password1 != password2:
-            messages.error(request, "Passwords do not match.")
-            return render(request, "register.html")
         try:
-            register_user(email, username, password1, role) 
-            messages.success(request, "Registration successful. Please log in.")
-            return redirect("login")
+            data = json.loads(request.body)
+            email = data.get("email")
+            username = data.get("username")
+            role = data.get("role")
+            password = data.get("password")
+            user = register_user(email, username, password, role)
+            response_data = {
+                "id": user.id,
+                "email": user.email,
+                "username": user.username,
+                "userrole": user.userrole,
+            }
+            return JsonResponse(response_data, status=201)
         except Exception as e:
-            messages.error(request, str(e))
-            return render(request, "register.html")
-    return render(request, "register.html")
-
-    
-
-def logout_view(request):
-    request.session.flush()  # Clear the session data
-    messages.success(request, "You have been logged out.")
-    return redirect("login")
+            return JsonResponse({"error": str(e)}, status=400)
+    return JsonResponse({"error": "Only POST method allowed"}, status=405)
