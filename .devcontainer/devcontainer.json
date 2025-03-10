@@ -5,16 +5,9 @@
 	},
 	"waitFor": "onCreateCommand",
 	"updateContentCommand": "pip install -r requirements.txt && python manage.py migrate",
-	"postCreateCommand": "cp .env.example .env",
-	"postAttachCommand": {
-		"server": "python manage.py runserver"
-	},
+	"postCreateCommand": "cp .env",
+	"postAttachCommand": "sh .devcontainer/run-servers.sh",
 	"customizations": {
-		"codespaces": {
-			"openFiles": [
-				"CRUD/templates/index.html"
-			]
-		},
 		"vscode": {
 			"extensions": [
 				"ms-python.python",
