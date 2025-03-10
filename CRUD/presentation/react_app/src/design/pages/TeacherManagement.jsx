@@ -1,69 +1,57 @@
 // src/design/TeacherManagement.jsx
-import React, { useState, useEffect } from 'react';
-import { fetchTeachers, addTeacher, modifyTeacher, removeTeacher } from '../../domain/teacher/teacher';
+import React, { useState } from 'react';
 
 const TeacherManagement = () => {
-  const [teachers, setTeachers] = useState([]);
+  // Start with some static teacher data.
+  const [teachers, setTeachers] = useState([
+    { id: 1, name: 'John Doe', email: 'john@example.com', subject: 'Math' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', subject: 'English' }
+  ]);
   const [searchQuery, setSearchQuery] = useState('');
   const [newTeacher, setNewTeacher] = useState({ name: '', email: '', subject: '' });
   const [updateTeacherData, setUpdateTeacherData] = useState(null);
   const [modalMode, setModalMode] = useState(null); // 'add' or 'update'
   const [message, setMessage] = useState('');
 
-  // Load teacher data from the backend.
-  const loadTeachers = async (query = '') => {
-    try {
-      const data = await fetchTeachers(query);
-      setTeachers(data);
-    } catch (error) {
-      setMessage(error.message);
-    }
-  };
-
-  useEffect(() => {
-    loadTeachers();
-  }, []);
-
-  const handleSearch = async (e) => {
+  // Handle search by filtering the static teacher data.
+  const handleSearch = (e) => {
     e.preventDefault();
-    loadTeachers(searchQuery);
+    // For demonstration, we'll simply filter by name.
+    const filtered = teachers.filter(teacher =>
+      teacher.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setTeachers(filtered);
   };
 
-  const handleAddTeacher = async (e) => {
+  // Add a new teacher to the static list.
+  const handleAddTeacher = (e) => {
     e.preventDefault();
-    try {
-      await addTeacher(newTeacher);
-      setMessage("Teacher added successfully.");
-      loadTeachers();
-      setNewTeacher({ name: '', email: '', subject: '' });
-      setModalMode(null);
-    } catch (error) {
-      setMessage(error.message);
-    }
+    const newId = teachers.length ? teachers[teachers.length - 1].id + 1 : 1;
+    const teacherToAdd = { id: newId, ...newTeacher };
+    setTeachers([...teachers, teacherToAdd]);
+    setMessage("Teacher added successfully.");
+    setNewTeacher({ name: '', email: '', subject: '' });
+    setModalMode(null);
   };
 
-  const handleUpdateTeacher = async (e) => {
+  // Update a teacher in the static list.
+  const handleUpdateTeacher = (e) => {
     e.preventDefault();
-    try {
-      await modifyTeacher(updateTeacherData.id, updateTeacherData);
-      setMessage("Teacher updated successfully.");
-      loadTeachers();
-      setUpdateTeacherData(null);
-      setModalMode(null);
-    } catch (error) {
-      setMessage(error.message);
-    }
+    const updatedTeachers = teachers.map(teacher =>
+      teacher.id === updateTeacherData.id ? updateTeacherData : teacher
+    );
+    setTeachers(updatedTeachers);
+    setMessage("Teacher updated successfully.");
+    setUpdateTeacherData(null);
+    setModalMode(null);
   };
 
-  const handleDeleteTeacher = async (teacherId) => {
+  // Delete a teacher from the static list.
+  const handleDeleteTeacher = (teacherId) => {
     if (window.confirm("Are you sure you want to delete this teacher?")) {
-      try {
-        await removeTeacher(teacherId);
-        setMessage("Teacher deleted successfully.");
-        loadTeachers();
-      } catch (error) {
-        setMessage(error.message);
-      }
+      const updatedTeachers = teachers.filter(teacher => teacher.id !== teacherId);
+      setTeachers(updatedTeachers);
+      setMessage("Teacher deleted successfully.");
     }
   };
 
