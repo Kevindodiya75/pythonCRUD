@@ -1,46 +1,70 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
+import json
+from django.http import JsonResponse, HttpResponseNotAllowed, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from CRUD.domain.usecases.course_usecase import (
     create_course_usecase,
     update_course_usecase,
     delete_course_usecase,
+    get_course_usecase,
     list_courses_usecase
 )
-from CRUD.data.models.course_model import course_model  
 
-def course_index(request):
-    if request.method == 'POST':
-        if 'create' in request.POST:
-            coursename = request.POST.get('coursename')
-            if coursename:
-                create_course_usecase(coursename)
-                messages.success(request, 'Course added successfully.')
-            else:
-                messages.error(request, 'Course name is required.')
-            return redirect('course')
-        elif 'update' in request.POST:
-            course_id = request.POST.get('id')
-            coursename = request.POST.get('coursename')
-            try:
-                update_course_usecase(course_id, coursename)
-                messages.success(request, 'Course updated successfully.')
-            except course_model.DoesNotExist:
-                messages.error(request, 'Course not found.')
-            return redirect('course')
-        elif 'delete' in request.POST:
-            course_id = request.POST.get('id')
-            try:
-                delete_course_usecase(course_id)
-                messages.success(request, 'Course deleted successfully.')
-            except course_model.DoesNotExist:
-                messages.error(request, 'Course not found.')
-            return redirect('course')
-        elif 'search' in request.POST:
-            query = request.POST.get('query', '')
-            courses = course_model.objects.filter(coursename__icontains=query)
-            context = {'courses': courses, 'search_query': query}
-            return render(request, 'course.html', context)
+@csrf_exempt
+def add_course_api(request):
+    """Endpoint to add a new course (POST only)."""
+    if request.method == "POST":
+        try:
+            body = json.loads(request.body)
+            coursename = body.get("coursename")
+            if not coursename:
+                return JsonResponse({"error": "Course name is required."}, status=400)
+            course = create_course_usecase(coursename)
+            return JsonResponse({"id": course.id, "coursename": course.coursename}, status=201)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return HttpResponseNotAllowed(["POST"])
 
-    courses = list_courses_usecase()
-    context = {'courses': courses, 'search_query': ''}
-    return render(request, 'course.html', context)
+def get_course_api(request, course_id):
+    """Endpoint to retrieve a single course (GET only)."""
+    if request.method == "GET":
+        try:
+            course = get_course_usecase(course_id)
+            return JsonResponse({"id": course.id, "coursename": course.coursename}, status=200)
+        except Exception:
+            return JsonResponse({"error": "Course not found."}, status=404)
+    return HttpResponseNotAllowed(["GET"])
+
+def list_courses_api(request):
+    """Endpoint to list all courses (GET only)."""
+    if request.method == "GET":
+        courses = list_courses_usecase()
+        data = [{"id": course.id, "coursename": course.coursename} for course in courses]
+        return JsonResponse(data, safe=False, status=200)
+    return HttpResponseNotAllowed(["GET"])
+
+@csrf_exempt
+def update_course_api(request, course_id):
+    """Endpoint to update a course (PUT/PATCH only)."""
+    if request.method in ["PUT", "PATCH"]:
+        try:
+            body = json.loads(request.body)
+            coursename = body.get("coursename")
+            if not coursename:
+                return JsonResponse({"error": "Course name is required."}, status=400)
+            course = update_course_usecase(course_id, coursename)
+            return JsonResponse({"id": course.id, "coursename": course.coursename}, status=200)
+        except Exception:
+            return JsonResponse({"error": "Course not found or update failed."}, status=404)
+    return HttpResponseNotAllowed(["PUT", "PATCH"])
+
+@csrf_exempt
+def delete_course_api(request, course_id):
+    """Endpoint to delete a course (DELETE only)."""
+    if request.method == "DELETE":
+        try:
+            delete_course_usecase(course_id)
+            # Although a 204 No Content is typical, here we return a JSON message.
+            return JsonResponse({"message": "Course deleted successfully."}, status=200)
+        except Exception:
+            return JsonResponse({"error": "Course not found."}, status=404)
+    return HttpResponseNotAllowed(["DELETE"])

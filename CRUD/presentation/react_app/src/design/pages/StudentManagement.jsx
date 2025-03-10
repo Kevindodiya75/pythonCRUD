@@ -1,4 +1,3 @@
-// src/design/StudentManagement.jsx
 import React, { useState, useEffect } from 'react';
 import {
   fetchStudents,
@@ -12,14 +11,14 @@ const StudentManagement = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [formData, setFormData] = useState({ name: '', email: '', course: '' });
   const [updateData, setUpdateData] = useState(null);
-  const [modalMode, setModalMode] = useState(null); // 'add' or 'update'
+  const [modalMode, setModalMode] = useState(null); 
   const [message, setMessage] = useState('');
 
-  // Load students from backend
   const loadStudents = async (query = '') => {
     try {
       const data = await fetchStudents(query);
-      setStudents(data);
+      console.log("Loaded students:", data);
+      setStudents(Array.isArray(data) ? data : []);
     } catch (error) {
       setMessage(error.message);
     }
@@ -29,13 +28,11 @@ const StudentManagement = () => {
     loadStudents();
   }, []);
 
-  // Handle search form submission
   const handleSearch = async (e) => {
     e.preventDefault();
     loadStudents(searchQuery);
   };
 
-  // Handle adding a student
   const handleAddStudent = async (e) => {
     e.preventDefault();
     try {
@@ -49,7 +46,6 @@ const StudentManagement = () => {
     }
   };
 
-  // Handle updating a student
   const handleUpdateStudent = async (e) => {
     e.preventDefault();
     try {
@@ -63,7 +59,6 @@ const StudentManagement = () => {
     }
   };
 
-  // Handle student deletion
   const handleDeleteStudent = async (studentId) => {
     if (window.confirm("Are you sure you want to delete this student?")) {
       try {
@@ -78,9 +73,8 @@ const StudentManagement = () => {
 
   return (
     <div className="container mt-5 p-5 rounded shadow bg-white">
-      {/* Navigation and Logout */}
       <div className="d-flex justify-content-end mb-3">
-        <a href="/index" className="btn btn-outline-primary me-2">Students</a>
+        <a href="/students" className="btn btn-outline-primary me-2">Students</a>
         <a href="/courses" className="btn btn-outline-secondary me-2">Courses</a>
         <a href="/teacher" className="btn btn-outline-success me-2">Teachers</a>
         <button className="btn btn-danger" onClick={() => {
@@ -91,8 +85,7 @@ const StudentManagement = () => {
 
       {message && <div className="mb-3 alert alert-info text-center">{message}</div>}
 
-      {/* Search Bar and Add Button */}
-      <div className="d-flex mb-3 justify-content-between align-items-center">
+      <div className="d-flex justify-content-between align-items-center mb-3">
         <button
           className="btn btn-primary px-3 btn-sm"
           onClick={() => setModalMode('add')}
@@ -114,7 +107,6 @@ const StudentManagement = () => {
         </form>
       </div>
 
-      {/* Students Table */}
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -126,32 +118,37 @@ const StudentManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {students.map(student => (
-            <tr key={student.id}>
-              <td>{student.id}</td>
-              <td>{student.name}</td>
-              <td>{student.email}</td>
-              <td>{student.course ? student.course.coursename : "No course"}</td>
-              <td>
-                <button
-                  className="btn btn-sm btn-success me-2"
-                  onClick={() => { setModalMode('update'); setUpdateData(student); }}
-                >
-                  <i className="fa-regular fa-pen-to-square"></i>
-                </button>
-                <button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => handleDeleteStudent(student.id)}
-                >
-                  <i className="fa-solid fa-trash"></i>
-                </button>
-              </td>
+          {students.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="text-center">No student data available</td>
             </tr>
-          ))}
+          ) : (
+            students.map(student => (
+              <tr key={student.id}>
+                <td>{student.id}</td>
+                <td>{student.name}</td>
+                <td>{student.email}</td>
+                <td>{student.course ? student.course.coursename : "No course"}</td>
+                <td>
+                  <button
+                    className="btn btn-sm btn-success me-2"
+                    onClick={() => { setModalMode('update'); setUpdateData(student); }}
+                  >
+                    <i className="fa-regular fa-pen-to-square"></i>
+                  </button>
+                  <button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => handleDeleteStudent(student.id)}
+                  >
+                    <i className="fa-solid fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
 
-      {/* Add Student Modal */}
       {modalMode === 'add' && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
@@ -193,7 +190,6 @@ const StudentManagement = () => {
                       onChange={(e) => setFormData({ ...formData, course: e.target.value })}
                     >
                       <option value="">Select a course</option>
-                      {/* Map over courses (if loaded) to display options */}
                     </select>
                   </div>
                 </div>
@@ -207,7 +203,6 @@ const StudentManagement = () => {
         </div>
       )}
 
-      {/* Update Student Modal */}
       {modalMode === 'update' && updateData && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
@@ -250,7 +245,6 @@ const StudentManagement = () => {
                       onChange={(e) => setUpdateData({ ...updateData, course: { id: e.target.value } })}
                     >
                       <option value="">Select a course</option>
-                      {/* Map over courses to render options */}
                     </select>
                   </div>
                 </div>

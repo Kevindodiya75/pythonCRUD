@@ -2,18 +2,22 @@ import React, { useState } from 'react';
 import { login } from '../../domain/auth/auth';
 import { useNavigate } from 'react-router-dom';
 
-
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const data = await login(email, password);
+      // Store the complete user object
       localStorage.setItem("user", JSON.stringify(data));
+      // Also store individual values for convenience
+      localStorage.setItem("user_id", data.id);
+      localStorage.setItem("userrole", data.userrole);
       setMessage("Login successful!");
       navigate("/students");
     } catch (error) {

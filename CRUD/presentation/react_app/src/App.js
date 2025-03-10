@@ -16,7 +16,6 @@ const App = () => {
         <Route path="/courses" element={<CoursesManagement />} />
         <Route path="/students" element={<StudentsManagement />} />
         <Route path="/teacher" element={<TeacherManagement />} />
-        {/* Redirect root to login or define a Home component */}
         <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>

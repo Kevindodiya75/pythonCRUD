@@ -1,4 +1,3 @@
-// src/domain/course.js
 import {
     getCoursesApi,
     createCourseApi,
@@ -6,13 +5,11 @@ import {
     deleteCourseApi,
   } from '../../driven/courses/CourseApi';
   
-  export const fetchCourses = async (query = '') => {
-    // You could add additional filtering or processing here if needed.
-    return await getCoursesApi(query);
+  export const fetchCourses = async () => {
+    return await getCoursesApi();
   };
   
   export const addCourse = async (courseName) => {
-    // Here you could validate the course name if needed.
     return await createCourseApi(courseName);
   };
   

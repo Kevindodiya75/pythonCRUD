@@ -1,34 +1,45 @@
 // src/design/CoursesManagement.jsx
 import React, { useState, useEffect } from 'react';
 import { fetchCourses, addCourse, modifyCourse, removeCourse } from '../../domain/courses/Course';
-
+import {getCoursesApi} from "../../driven/courses/CourseApi"
 const CoursesManagement = () => {
   const [courses, setCourses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [newCourseName, setNewCourseName] = useState('');
-  const [updateData, setUpdateData] = useState(null); // holds the course to update
-  const [modalMode, setModalMode] = useState(null); // 'add' or 'update'
+  const [updateData, setUpdateData] = useState(null); 
+  const [modalMode, setModalMode] = useState(null); 
   const [message, setMessage] = useState('');
 
-  // Load courses on mount or when searching
-  const loadCourses = async (query = '') => {
-    try {
-      const data = await fetchCourses(query);
-      setCourses(data);
-    } catch (error) {
-      setMessage(error.message);
-    }
-  };
+  // Load courses from backend
+    const loadCourses = async (query = '') => {
+      try {
+        const data = await fetchCourses(query);
+        console.log("Is data an array?", Array.isArray(data));
+        console.log(data)
+        if (data && !Array.isArray(data) && data.coursename) {
+          setCourses([data]);
+        } else if (Array.isArray(data)) {
+          setCourses(data);
+        } else {
+          setCourses([]);
+        }
+      } catch (error) {
+        setMessage(error.message);
+      }
+    };
+    
 
   useEffect(() => {
     loadCourses();
   }, []);
 
+  // Handle search form submission
   const handleSearch = async (e) => {
     e.preventDefault();
     loadCourses(searchQuery);
   };
 
+  // Handle adding a course
   const handleAddCourse = async (e) => {
     e.preventDefault();
     try {
@@ -42,6 +53,7 @@ const CoursesManagement = () => {
     }
   };
 
+  // Handle updating a course
   const handleUpdateCourse = async (e) => {
     e.preventDefault();
     try {
@@ -55,6 +67,7 @@ const CoursesManagement = () => {
     }
   };
 
+  // Handle course deletion
   const handleDeleteCourse = async (courseId) => {
     if (window.confirm("Are you sure you want to delete this course?")) {
       try {
@@ -69,7 +82,7 @@ const CoursesManagement = () => {
 
   return (
     <div className="container mt-5 p-5 rounded shadow bg-white">
-      {/* Navigation (You may want to extract this to its own component) */}
+      {/* Navigation Links */}
       <div className="d-flex justify-content-end mb-3">
         <a href="/students" className="btn btn-outline-primary me-2">Students</a>
         <a href="/courses" className="btn btn-outline-secondary me-2">Courses</a>
@@ -78,7 +91,8 @@ const CoursesManagement = () => {
 
       {message && <div className="mb-3 alert alert-success text-center">{message}</div>}
 
-      <div className="d-flex mb-3 justify-content-between align-items-center">
+      {/* Search Bar and Add Button */}
+      <div className="d-flex justify-content-between align-items-center mb-3">
         <button
           className="btn btn-primary px-3 btn-sm"
           onClick={() => setModalMode('add')}
@@ -100,6 +114,7 @@ const CoursesManagement = () => {
         </form>
       </div>
 
+      {/* Courses Table */}
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -109,26 +124,32 @@ const CoursesManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {courses.map(course => (
-            <tr key={course.id}>
-              <td>{course.id}</td>
-              <td>{course.coursename}</td>
-              <td>
-                <button
-                  className="btn btn-sm btn-success me-2"
-                  onClick={() => { setUpdateData(course); setModalMode('update'); }}
-                >
-                  <i className="fa-regular fa-pen-to-square"></i>
-                </button>
-                <button
-                  className="btn btn-sm btn-danger"
-                  onClick={() => handleDeleteCourse(course.id)}
-                >
-                  <i className="fa-solid fa-trash"></i>
-                </button>
-              </td>
+          {courses.length === 0 ? (
+            <tr>
+              <td colSpan="3" className="text-center">No course data available</td>
             </tr>
-          ))}
+          ) : (
+            courses.map(course => (
+              <tr key={course.id}>
+                <td>{course.id}</td>
+                <td>{course.coursename}</td>
+                <td>
+                  <button
+                    className="btn btn-sm btn-success me-2"
+                    onClick={() => { setUpdateData(course); setModalMode('update'); }}
+                  >
+                    <i className="fa-regular fa-pen-to-square">Update</i>
+                  </button>
+                  <button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => handleDeleteCourse(course.id)}
+                  >
+                    <i className="fa-solid fa-trash">delete</i>
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
 
@@ -195,6 +216,7 @@ const CoursesManagement = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };
