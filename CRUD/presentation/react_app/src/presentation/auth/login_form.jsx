@@ -253,7 +253,7 @@ const LoginForm = () => {
                 {isSubmitting ? (
                   <CircularProgress size={28} color="inherit" />
                 ) : (
-                  'Sign In Now'
+                  'Login'
                 )}
               </Button>
             </motion.div>
