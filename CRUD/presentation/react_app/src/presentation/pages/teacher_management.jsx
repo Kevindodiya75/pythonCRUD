@@ -1,57 +1,78 @@
-// src/design/TeacherManagement.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchTeachers, addTeacher, modifyTeacher, removeTeacher } from '../../domain/teacher/teacher';
 
 const TeacherManagement = () => {
-  // Start with some static teacher data.
-  const [teachers, setTeachers] = useState([
-    { id: 1, name: 'John Doe', email: 'john@example.com', subject: 'Math' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', subject: 'English' }
-  ]);
+  const [teachers, setTeachers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [newTeacher, setNewTeacher] = useState({ name: '', email: '', subject: '' });
   const [updateTeacherData, setUpdateTeacherData] = useState(null);
-  const [modalMode, setModalMode] = useState(null); // 'add' or 'update'
+  const [modalMode, setModalMode] = useState(null);
   const [message, setMessage] = useState('');
 
-  // Handle search by filtering the static teacher data.
-  const handleSearch = (e) => {
-    e.preventDefault();
-    // For demonstration, we'll simply filter by name.
-    const filtered = teachers.filter(teacher =>
-      teacher.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setTeachers(filtered);
+  // Fetch teachers. The backend should return an object like { teachers: [...] }
+  const loadTeachers = async () => {
+    try {
+      const result = await fetchTeachers();
+      // Adjust this line if your API returns the teachers array differently
+      setTeachers(result.teachers || result);
+    } catch (error) {
+      console.error("Error fetching teachers:", error);
+      setMessage("Error loading teachers.");
+    }
   };
 
-  // Add a new teacher to the static list.
-  const handleAddTeacher = (e) => {
+  useEffect(() => {
+    loadTeachers();
+  }, []);
+
+  const handleSearch = async (e) => {
     e.preventDefault();
-    const newId = teachers.length ? teachers[teachers.length - 1].id + 1 : 1;
-    const teacherToAdd = { id: newId, ...newTeacher };
-    setTeachers([...teachers, teacherToAdd]);
-    setMessage("Teacher added successfully.");
-    setNewTeacher({ name: '', email: '', subject: '' });
-    setModalMode(null);
+    // If backend supports search, update the API accordingly.
+    await loadTeachers();
   };
 
-  // Update a teacher in the static list.
-  const handleUpdateTeacher = (e) => {
+  // Add a new teacher using the API.
+  // The created_by field will be added automatically in the API function (if implemented)
+  const handleAddTeacher = async (e) => {
     e.preventDefault();
-    const updatedTeachers = teachers.map(teacher =>
-      teacher.id === updateTeacherData.id ? updateTeacherData : teacher
-    );
-    setTeachers(updatedTeachers);
-    setMessage("Teacher updated successfully.");
-    setUpdateTeacherData(null);
-    setModalMode(null);
+    try {
+      await addTeacher(newTeacher);
+      setMessage("Teacher added successfully.");
+      setNewTeacher({ name: '', email: '', subject: '' });
+      setModalMode(null);
+      loadTeachers(); // refresh list
+    } catch (error) {
+      console.error("Error adding teacher:", error);
+      setMessage("Error adding teacher.");
+    }
   };
 
-  // Delete a teacher from the static list.
-  const handleDeleteTeacher = (teacherId) => {
+  // Update a teacher using the API.
+  const handleUpdateTeacher = async (e) => {
+    e.preventDefault();
+    try {
+      await modifyTeacher(updateTeacherData.id, updateTeacherData);
+      setMessage("Teacher updated successfully.");
+      setUpdateTeacherData(null);
+      setModalMode(null);
+      loadTeachers(); // refresh list
+    } catch (error) {
+      console.error("Error updating teacher:", error);
+      setMessage("Error updating teacher.");
+    }
+  };
+
+  // Delete a teacher using the API.
+  const handleDeleteTeacher = async (teacherId) => {
     if (window.confirm("Are you sure you want to delete this teacher?")) {
-      const updatedTeachers = teachers.filter(teacher => teacher.id !== teacherId);
-      setTeachers(updatedTeachers);
-      setMessage("Teacher deleted successfully.");
+      try {
+        await removeTeacher(teacherId);
+        setMessage("Teacher deleted successfully.");
+        loadTeachers(); // refresh list
+      } catch (error) {
+        console.error("Error deleting teacher:", error);
+        setMessage("Error deleting teacher.");
+      }
     }
   };
 
@@ -96,7 +117,7 @@ const TeacherManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {teachers.map(teacher => (
+          {teachers.map((teacher) => (
             <tr key={teacher.id}>
               <td>{teacher.id}</td>
               <td>{teacher.name}</td>
@@ -224,7 +245,6 @@ const TeacherManagement = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };

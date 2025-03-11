@@ -1,66 +1,125 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from CRUD.domain.usecases.teacher_usecase import (
+    list_all_teachers_usecase,
+    get_teacher_usecase,
     create_teacher_usecase,
     update_teacher_usecase,
-    delete_teacher_usecase,
-    list_teachers_usecase
+    delete_teacher_usecase
 )
-from CRUD.data.models.teacher_model import teacher_model
 
-def teacher_index(request):
-    userrole = request.session.get("userrole")
-    user_id = request.session.get("user_id")
-    if not user_id:
-        messages.error(request, "You must be logged in to view this page.")
-        return redirect("login")
+@csrf_exempt
+def get_all_teachers_api(request):
+    """
+    GET /api/teachers/getall/
+    Returns the full list of teachers.
+    """
+    if request.method == 'GET':
+        try:
+            teachers = list_all_teachers_usecase()
+            data = [
+                {
+                    "id": teacher.id,
+                    "name": teacher.name,
+                    "email": teacher.email,
+                    "subject": teacher.subject,
+                    "created_by": teacher.created_by
+                }
+                for teacher in teachers
+            ]
+            return JsonResponse({"teachers": data}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    else:
+        return JsonResponse({"error": "GET method required."}, status=405)
 
-    if request.method == "POST":
-        # Allow search for everyone
-        if "search" in request.POST:
-            query = request.POST.get("query", "")
-            teachers = teacher_model.objects.filter(name__icontains=query, created_by_id=user_id)
-            context = {
-                "teachers": teachers,
-                "search_query": query,
+@csrf_exempt
+def get_teacher_api(request, teacher_id):
+    """
+    GET /api/teachers/get/<teacher_id>/
+    """
+    if request.method == 'GET':
+        try:
+            teacher = get_teacher_usecase(teacher_id)
+            data = {
+                "id": teacher.id,
+                "name": teacher.name,
+                "email": teacher.email,
+                "subject": teacher.subject,
+                "created_by": teacher.created_by
             }
-            return render(request, "teacher.html", context)
+            return JsonResponse(data, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=404)
+    else:
+        return JsonResponse({"error": "GET method required."}, status=405)
 
-        # For create, update, or delete, only allow if userrole is "teacher"
-        if userrole != "teacher":
-            messages.error(request, "You are not authorized to modify teacher data.")
-            return redirect("teacher_index")
+@csrf_exempt
+def add_teacher_api(request):
+    """
+    POST /api/teachers/add/
+    Expects JSON payload with keys: name, email, subject, created_by.
+    """
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            name = data.get("name")
+            email = data.get("email")
+            subject = data.get("subject")
+            created_by = data.get("created_by")
+            if not (name and email and subject and created_by):
+                return JsonResponse({"error": "Missing required fields."}, status=400)
+            teacher = create_teacher_usecase(name, email, subject, created_by)
+            response_data = {
+                "id": teacher.id,
+                "name": teacher.name,
+                "email": teacher.email,
+                "subject": teacher.subject,
+                "created_by": teacher.created_by
+            }
+            return JsonResponse(response_data, status=201)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    else:
+        return JsonResponse({"error": "POST method required."}, status=405)
 
-        if "create" in request.POST:
-            name = request.POST.get("name")
-            email = request.POST.get("email")
-            subject = request.POST.get("subject")
-            if name and email and subject:
-                create_teacher_usecase(name, email, subject, user_id)
-                messages.success(request, "Teacher added successfully.")
-            else:
-                messages.error(request, "All fields are required.")
-            return redirect("teacher_index")
-        elif "update" in request.POST:
-            teacher_id = request.POST.get("id")
-            name = request.POST.get("name")
-            email = request.POST.get("email")
-            subject = request.POST.get("subject")
-            try:
-                update_teacher_usecase(teacher_id, name, email, subject)
-                messages.success(request, "Teacher updated successfully.")
-            except teacher_model.DoesNotExist:
-                messages.error(request, "Teacher not found.")
-            return redirect("teacher_index")
-        elif "delete" in request.POST:
-            teacher_id = request.POST.get("id")
-            try:
-                delete_teacher_usecase(teacher_id)
-                messages.success(request, "Teacher deleted successfully.")
-            except teacher_model.DoesNotExist:
-                messages.error(request, "Teacher not found.")
-            return redirect("teacher_index")
+@csrf_exempt
+def update_teacher_api(request, teacher_id):
+    """
+    PUT /api/teachers/update/<teacher_id>/
+    Expects JSON payload with keys: name, email, subject.
+    """
+    if request.method == 'PUT':
+        try:
+            data = json.loads(request.body)
+            name = data.get("name")
+            email = data.get("email")
+            subject = data.get("subject")
+            teacher = update_teacher_usecase(teacher_id, name, email, subject)
+            response_data = {
+                "id": teacher.id,
+                "name": teacher.name,
+                "email": teacher.email,
+                "subject": teacher.subject,
+                "created_by": teacher.created_by
+            }
+            return JsonResponse(response_data, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    else:
+        return JsonResponse({"error": "PUT method required."}, status=405)
 
-    teachers = list_teachers_usecase(user_id)
-    context = {"teachers": teachers, "search_query": ""}
-    return render(request, "teacher.html", context)
+@csrf_exempt
+def delete_teacher_api(request, teacher_id):
+    """
+    DELETE /api/teachers/delete/<teacher_id>/
+    """
+    if request.method == 'DELETE':
+        try:
+            delete_teacher_usecase(teacher_id)
+            return JsonResponse({"message": "Teacher deleted successfully"}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    else:
+        return JsonResponse({"error": "DELETE method required."}, status=405)

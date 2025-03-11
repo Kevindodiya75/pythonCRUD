@@ -7,4 +7,4 @@ class TeacherEntity:
     name: str = ""
     email: str = ""
     subject: str = ""
-    created_by: Optional[int] = None  # Storing the user ID who created the teacher record
+    created_by: Optional[int] = None
