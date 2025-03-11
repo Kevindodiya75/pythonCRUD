@@ -1,19 +1,17 @@
-# CRUD/api/views/auth_api.py
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from CRUD.domain.usecases.auth_usecase import login_user, register_user
 
+
 @csrf_exempt
 def login_api(request):
-  
     if request.method == "POST":
         try:
             data = json.loads(request.body)
             email = data.get("email")
             password = data.get("password")
             user = login_user(email, password)
-            # Return key user details
             response_data = {
                 "id": user.id,
                 "email": user.email,
@@ -28,7 +26,6 @@ def login_api(request):
 
 @csrf_exempt
 def register_api(request):
-   
     if request.method == "POST":
         try:
             data = json.loads(request.body)

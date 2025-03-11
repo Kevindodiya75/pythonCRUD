@@ -5,15 +5,18 @@ import {
   modifyStudent,
   removeStudent
 } from '../../domain/student/student';
+import { fetchCourses } from '../../domain/courses/course';
 
 const StudentManagement = () => {
   const [students, setStudents] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [formData, setFormData] = useState({ name: '', email: '', course: '' });
   const [updateData, setUpdateData] = useState(null);
-  const [modalMode, setModalMode] = useState(null); 
+  const [modalMode, setModalMode] = useState(null);
   const [message, setMessage] = useState('');
 
+  // Load students data
   const loadStudents = async (query = '') => {
     try {
       const data = await fetchStudents(query);
@@ -24,8 +27,20 @@ const StudentManagement = () => {
     }
   };
 
+  // Load courses data
+  const loadCourses = async () => {
+    try {
+      const data = await fetchCourses();
+      console.log("Loaded courses:", data);
+      setCourses(Array.isArray(data) ? data : []);
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+
   useEffect(() => {
     loadStudents();
+    loadCourses();
   }, []);
 
   const handleSearch = async (e) => {
@@ -36,7 +51,13 @@ const StudentManagement = () => {
   const handleAddStudent = async (e) => {
     e.preventDefault();
     try {
-      await addStudent(formData);
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        course: Number(formData.course), // Assuming course is numeric when submitting
+        created_by: 1
+      };
+      await addStudent(payload);
       setMessage("Student added successfully.");
       loadStudents();
       setFormData({ name: '', email: '', course: '' });
@@ -49,7 +70,13 @@ const StudentManagement = () => {
   const handleUpdateStudent = async (e) => {
     e.preventDefault();
     try {
-      await modifyStudent(updateData.id, updateData);
+      const payload = {
+        name: updateData.name,
+        email: updateData.email,
+        course: Number(updateData.course),
+        created_by: 1
+      };
+      await modifyStudent(updateData.id, payload);
       setMessage("Student updated successfully.");
       loadStudents();
       setUpdateData(null);
@@ -69,6 +96,12 @@ const StudentManagement = () => {
         setMessage(error.message);
       }
     }
+  };
+
+  // Helper to get course name from courses array using course ID.
+  const getCourseName = (courseId) => {
+    const course = courses.find(c => c.id === courseId);
+    return course ? course.coursename : "No course";
   };
 
   return (
@@ -128,18 +161,22 @@ const StudentManagement = () => {
                 <td>{student.id}</td>
                 <td>{student.name}</td>
                 <td>{student.email}</td>
-                <td>{student.course ? student.course.coursename : "No course"}</td>
+                <td>
+                  {typeof student.course === 'string'
+                    ? student.course
+                    : getCourseName(student.course)}
+                </td>
                 <td>
                   <button
                     className="btn btn-sm btn-success me-2"
                     onClick={() => { setModalMode('update'); setUpdateData(student); }}
-                  >
+                  >Update
                     <i className="fa-regular fa-pen-to-square"></i>
                   </button>
                   <button
                     className="btn btn-sm btn-danger"
                     onClick={() => handleDeleteStudent(student.id)}
-                  >
+                  >Delete
                     <i className="fa-solid fa-trash"></i>
                   </button>
                 </td>
@@ -149,6 +186,7 @@ const StudentManagement = () => {
         </tbody>
       </table>
 
+      {/* Add Student Modal */}
       {modalMode === 'add' && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
@@ -188,8 +226,14 @@ const StudentManagement = () => {
                       className="form-control"
                       value={formData.course}
                       onChange={(e) => setFormData({ ...formData, course: e.target.value })}
+                      required
                     >
                       <option value="">Select a course</option>
+                      {courses.map(course => (
+                        <option key={course.id} value={course.id}>
+                          {course.coursename}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -203,6 +247,7 @@ const StudentManagement = () => {
         </div>
       )}
 
+      {/* Update Student Modal */}
       {modalMode === 'update' && updateData && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
@@ -241,10 +286,18 @@ const StudentManagement = () => {
                     <select
                       name="course"
                       className="form-control"
-                      value={updateData.course ? updateData.course.id : ""}
-                      onChange={(e) => setUpdateData({ ...updateData, course: { id: e.target.value } })}
+                      value={updateData.course || ""}
+                      onChange={(e) =>
+                        setUpdateData({ ...updateData, course: Number(e.target.value) })
+                      }
+                      required
                     >
                       <option value="">Select a course</option>
+                      {courses.map(course => (
+                        <option key={course.id} value={course.id}>
+                          {course.coursename}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
