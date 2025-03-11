@@ -2,22 +2,23 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:800
 
 export const getCoursesApi = async () => {
   const userId = localStorage.getItem("user_id");
-  const url = `${API_BASE_URL}/courses/${userId}/`;
+  const url = `${API_BASE_URL}/courses/getall/`;
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error('Failed to fetch courses');
   }
   const data = await response.json();
-  console.log(data)
- 
-  // if (data && data.courses && Array.isArray(data.courses)) {
-  //   return data.courses;
-  // } else if (Array.isArray(data)) {
+  
+  // Adjust based on API response structure
+  if (data && data.courses && Array.isArray(data.courses)) {
+    return data.courses;
+  } else if (Array.isArray(data)) {
     return data;
-  // } else {
-  //   return []; 
-  // }
+  } else {
+    return []; 
+  }
 };
+
 
 export const createCourseApi = async (courseName) => {
   const response = await fetch(`${API_BASE_URL}/courses/add/`, {
@@ -32,7 +33,7 @@ export const createCourseApi = async (courseName) => {
 };
 
 export const updateCourseApi = async (courseId, courseName) => {
-  const response = await fetch(`${API_BASE_URL}/courses/${courseId}/`, {
+  const response = await fetch(`${API_BASE_URL}/courses/update/${courseId}/`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ coursename: courseName })
@@ -44,7 +45,7 @@ export const updateCourseApi = async (courseId, courseName) => {
 };
 
 export const deleteCourseApi = async (courseId) => {
-  const response = await fetch(`${API_BASE_URL}/courses/${courseId}/`, {
+  const response = await fetch(`${API_BASE_URL}/courses/delete/${courseId}/`, {
     method: 'DELETE'
   });
   if (!response.ok) {

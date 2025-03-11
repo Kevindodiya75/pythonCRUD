@@ -10,22 +10,16 @@ const CoursesManagement = () => {
   const [message,   setMessage] = useState('');
 
   // Load courses from backend
-    const loadCourses = async (query = '') => {
-      try {
-        const data = await fetchCourses(query);
-        console.log("Is data an array?", Array.isArray(data));
-        console.log(data)
-        if (data && !Array.isArray(data) && data.coursename) {
-          setCourses([data]);
-        } else if (Array.isArray(data)) {
-          setCourses(data);
-        } else {
-          setCourses([]);
-        }
-      } catch (error) {
-        setMessage(error.message);
-      }
-    };
+  const loadCourses = async () => {
+    try {
+      const data = await fetchCourses();
+      console.log("Is data an array?", Array.isArray(data));
+      setCourses(Array.isArray(data) ? data : []);
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+  
     
 
   useEffect(() => {
@@ -136,14 +130,15 @@ const CoursesManagement = () => {
                   <button
                     className="btn btn-sm btn-success me-2"
                     onClick={() => { setUpdateData(course); setModalMode('update'); }}
-                  >
-                    <i className="fa-regular fa-pen-to-square">Update</i>
+                  >Update
+
+                    <i className="fa-regular fa-pen-to-square"></i>
                   </button>
                   <button
                     className="btn btn-sm btn-danger"
                     onClick={() => handleDeleteCourse(course.id)}
-                  >
-                    <i className="fa-solid fa-trash">delete</i>
+                  >Delete
+                    <i className="fa-solid fa-trash"></i>
                   </button>
                 </td>
               </tr>

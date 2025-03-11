@@ -11,9 +11,9 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Include React build static assets in Django's static files lookup
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "CRUD", "presentation", "react_app", "build", "static"),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "CRUD", "presentation", "react_app", "build", "static"),
+# ]
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("SECRET_KEY", default="your-default-secret-key")
@@ -60,7 +60,7 @@ ROOT_URLCONF = "CRUD.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "CRUD", "templates")],
+        # "DIRS": [os.path.join(BASE_DIR, "CRUD", "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
