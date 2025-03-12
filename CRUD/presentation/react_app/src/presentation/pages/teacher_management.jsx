@@ -9,11 +9,9 @@ const TeacherManagement = () => {
   const [modalMode, setModalMode] = useState(null);
   const [message, setMessage] = useState('');
 
-  // Fetch teachers. The backend should return an object like { teachers: [...] }
   const loadTeachers = async () => {
     try {
       const result = await fetchTeachers();
-      // Adjust this line if your API returns the teachers array differently
       setTeachers(result.teachers || result);
     } catch (error) {
       console.error("Error fetching teachers:", error);
@@ -27,12 +25,10 @@ const TeacherManagement = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    // If backend supports search, update the API accordingly.
     await loadTeachers();
   };
 
-  // Add a new teacher using the API.
-  // The created_by field will be added automatically in the API function (if implemented)
+
   const handleAddTeacher = async (e) => {
     e.preventDefault();
     try {
@@ -40,14 +36,13 @@ const TeacherManagement = () => {
       setMessage("Teacher added successfully.");
       setNewTeacher({ name: '', email: '', subject: '' });
       setModalMode(null);
-      loadTeachers(); // refresh list
+      loadTeachers(); 
     } catch (error) {
       console.error("Error adding teacher:", error);
       setMessage("Error adding teacher.");
     }
   };
 
-  // Update a teacher using the API.
   const handleUpdateTeacher = async (e) => {
     e.preventDefault();
     try {
@@ -55,20 +50,19 @@ const TeacherManagement = () => {
       setMessage("Teacher updated successfully.");
       setUpdateTeacherData(null);
       setModalMode(null);
-      loadTeachers(); // refresh list
+      loadTeachers(); 
     } catch (error) {
       console.error("Error updating teacher:", error);
       setMessage("Error updating teacher.");
     }
   };
 
-  // Delete a teacher using the API.
   const handleDeleteTeacher = async (teacherId) => {
     if (window.confirm("Are you sure you want to delete this teacher?")) {
       try {
         await removeTeacher(teacherId);
         setMessage("Teacher deleted successfully.");
-        loadTeachers(); // refresh list
+        loadTeachers();
       } catch (error) {
         console.error("Error deleting teacher:", error);
         setMessage("Error deleting teacher.");
@@ -78,7 +72,6 @@ const TeacherManagement = () => {
 
   return (
     <div className="container mt-5 p-5 rounded shadow bg-white">
-      {/* Navigation Links */}
       <div className="d-flex justify-content-end mb-3">
         <a href="/students" className="btn btn-outline-primary me-2">Students</a>
         <a href="/courses" className="btn btn-outline-secondary me-2">Courses</a>
@@ -87,7 +80,6 @@ const TeacherManagement = () => {
 
       {message && <div className="alert alert-success text-center mb-3">{message}</div>}
 
-      {/* Search and Add Button */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <button className="btn btn-primary" onClick={() => setModalMode('add')}>
           Add New Teacher
@@ -105,7 +97,6 @@ const TeacherManagement = () => {
         </form>
       </div>
 
-      {/* Teachers Table */}
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -142,7 +133,6 @@ const TeacherManagement = () => {
         </tbody>
       </table>
 
-      {/* Add Teacher Modal */}
       {modalMode === 'add' && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
@@ -194,7 +184,6 @@ const TeacherManagement = () => {
         </div>
       )}
 
-      {/* Update Teacher Modal */}
       {modalMode === 'update' && updateTeacherData && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">

@@ -1,4 +1,3 @@
-// Layout.jsx - Improved Layout Component 
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { Box, CssBaseline, Toolbar } from "@mui/material";

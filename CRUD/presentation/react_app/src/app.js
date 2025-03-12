@@ -8,7 +8,6 @@ import StudentsManagement from "./presentation/pages/student_management";
 import TeacherManagement from "./presentation/pages/teacher_management";
 import Layout from "./presentation/componentes/layout";
 
-// Create theme
 const theme = createTheme({
   palette: {
     primary: {
@@ -36,17 +35,81 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
-          
+          <Route path="/" element={<Navigate to="/login" />} />
+
           {/* Routes that require layout with sidebar */}
-          <Route path="/" element={<Layout><Navigate to="/courses" /></Layout>} />
-          <Route path="/dashboard" element={<Layout><Navigate to="/courses" /></Layout>} />
-          <Route path="/courses" element={<Layout><CoursesManagement /></Layout>} />
-          <Route path="/courses/new" element={<Layout><CoursesManagement /></Layout>} />
-          <Route path="/courses/categories" element={<Layout><CoursesManagement /></Layout>} />
-          <Route path="/students" element={<Layout><StudentsManagement /></Layout>} />
-          <Route path="/students/new" element={<Layout><StudentsManagement /></Layout>} />
-          <Route path="/students/attendance" element={<Layout><StudentsManagement /></Layout>} />
-          <Route path="/teachers" element={<Layout><TeacherManagement /></Layout>} />
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <Navigate to="/courses" />
+              </Layout>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <Layout>
+                <Navigate to="/courses" />
+              </Layout>
+            }
+          />
+          <Route
+            path="/courses"
+            element={
+              <Layout>
+                <CoursesManagement />
+              </Layout>
+            }
+          />
+          <Route
+            path="/courses/new"
+            element={
+              <Layout>
+                <CoursesManagement />
+              </Layout>
+            }
+          />
+          <Route
+            path="/courses/categories"
+            element={
+              <Layout>
+                <CoursesManagement />
+              </Layout>
+            }
+          />
+          <Route
+            path="/students"
+            element={
+              <Layout>
+                <StudentsManagement />
+              </Layout>
+            }
+          />
+          <Route
+            path="/students/new"
+            element={
+              <Layout>
+                <StudentsManagement />
+              </Layout>
+            }
+          />
+          <Route
+            path="/students/attendance"
+            element={
+              <Layout>
+                <StudentsManagement />
+              </Layout>
+            }
+          />
+          <Route
+            path="/teachers"
+            element={
+              <Layout>
+                <TeacherManagement />
+              </Layout>
+            }
+          />
         </Routes>
       </Router>
     </ThemeProvider>

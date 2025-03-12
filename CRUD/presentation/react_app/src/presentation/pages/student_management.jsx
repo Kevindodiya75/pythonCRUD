@@ -16,7 +16,6 @@ const StudentManagement = () => {
   const [modalMode, setModalMode] = useState(null);
   const [message, setMessage] = useState('');
 
-  // Load students data
   const loadStudents = async (query = '') => {
     try {
       const data = await fetchStudents(query);
@@ -27,7 +26,6 @@ const StudentManagement = () => {
     }
   };
 
-  // Load courses data
   const loadCourses = async () => {
     try {
       const data = await fetchCourses();
@@ -54,7 +52,7 @@ const StudentManagement = () => {
       const payload = {
         name: formData.name,
         email: formData.email,
-        course: Number(formData.course), // Assuming course is numeric when submitting
+        course: Number(formData.course), 
         created_by: 1
       };
       await addStudent(payload);
@@ -98,7 +96,6 @@ const StudentManagement = () => {
     }
   };
 
-  // Helper to get course name from courses array using course ID.
   const getCourseName = (courseId) => {
     const course = courses.find(c => c.id === courseId);
     return course ? course.coursename : "No course";
@@ -186,7 +183,6 @@ const StudentManagement = () => {
         </tbody>
       </table>
 
-      {/* Add Student Modal */}
       {modalMode === 'add' && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
@@ -247,7 +243,6 @@ const StudentManagement = () => {
         </div>
       )}
 
-      {/* Update Student Modal */}
       {modalMode === 'update' && updateData && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">

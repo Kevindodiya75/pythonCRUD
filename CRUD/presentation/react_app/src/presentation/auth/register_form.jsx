@@ -66,12 +66,11 @@ const RegisterForm = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: '100vh', // Updated to cover the full viewport height
+        minHeight: '100vh', 
         padding: '2rem 0',
         background: 'linear-gradient(135deg, #f0f4ff 0%, #a8dadc 100%)',
       }}
     >
-      {/* Global Messages Container (unchanged) */}
 
       <motion.div
         initial={{ opacity: 0, y: -50 }}
@@ -83,7 +82,7 @@ const RegisterForm = () => {
           sx={{
             p: 4,
             width: '90%',
-            maxWidth: 800, // Increased from 500
+            maxWidth: 800, 
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(12px)',
             borderRadius: '16px',
@@ -115,7 +114,6 @@ const RegisterForm = () => {
               gap: 2
             }}
           >
-            {/* Username & Email Row */}
             <Box
               sx={{
                 display: 'flex',
@@ -123,7 +121,6 @@ const RegisterForm = () => {
                 '& > *': { flex: 1 }
               }}
             >
-              {/* Username Field */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -159,7 +156,6 @@ const RegisterForm = () => {
                 />
               </motion.div>
 
-              {/* Email Field */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -197,7 +193,6 @@ const RegisterForm = () => {
               </motion.div>
             </Box>
 
-            {/* Role Select */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -224,7 +219,6 @@ const RegisterForm = () => {
               </FormControl>
             </motion.div>
 
-            {/* Password Fields */}
             <Box
               sx={{
                 display: 'flex',
@@ -305,7 +299,6 @@ const RegisterForm = () => {
               </motion.div>
             </Box>
 
-            {/* Submit Button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -341,7 +334,6 @@ const RegisterForm = () => {
             </motion.div>
           </Box>
 
-          {/* Login Link */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

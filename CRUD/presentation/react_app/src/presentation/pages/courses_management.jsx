@@ -9,7 +9,6 @@ const CoursesManagement = () => {
   const [modalMode, setModalMode] = useState(null); 
   const [message,   setMessage] = useState('');
 
-  // Load courses from backend
   const loadCourses = async () => {
     try {
       const data = await fetchCourses();
@@ -26,13 +25,11 @@ const CoursesManagement = () => {
     loadCourses();
   }, []);
 
-  // Handle search form submission
   const handleSearch = async (e) => {
     e.preventDefault();
     loadCourses(searchQuery);
   };
 
-  // Handle adding a course
   const handleAddCourse = async (e) => {
     e.preventDefault();
     try {
@@ -46,7 +43,6 @@ const CoursesManagement = () => {
     }
   };
 
-  // Handle updating a course
   const handleUpdateCourse = async (e) => {
     e.preventDefault();
     try {
@@ -60,7 +56,6 @@ const CoursesManagement = () => {
     }
   };
 
-  // Handle course deletion
   const handleDeleteCourse = async (courseId) => {
     if (window.confirm("Are you sure you want to delete this course?")) {
       try {
@@ -75,7 +70,6 @@ const CoursesManagement = () => {
 
   return (
     <div className="container mt-5 p-5 rounded shadow bg-white">
-      {/* Navigation Links */}
       <div className="d-flex justify-content-end mb-3">
         <a href="/students" className="btn btn-outline-primary me-2">Students</a>
         <a href="/courses" className="btn btn-outline-secondary me-2">Courses</a>
@@ -84,7 +78,6 @@ const CoursesManagement = () => {
 
       {message && <div className="mb-3 alert alert-success text-center">{message}</div>}
 
-      {/* Search Bar and Add Button */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <button
           className="btn btn-primary px-3 btn-sm"
@@ -107,7 +100,6 @@ const CoursesManagement = () => {
         </form>
       </div>
 
-      {/* Courses Table */}
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -147,7 +139,6 @@ const CoursesManagement = () => {
         </tbody>
       </table>
 
-      {/* Add Course Modal */}
       {modalMode === 'add' && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
@@ -178,8 +169,6 @@ const CoursesManagement = () => {
           </div>
         </div>
       )}
-
-      {/* Update Course Modal */}
       {modalMode === 'update' && updateData && (
         <div className="modal d-block" tabIndex="-1">
           <div className="modal-dialog">
