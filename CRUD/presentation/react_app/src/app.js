@@ -4,9 +4,10 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import LoginForm from "./presentation/auth/login_form";
 import RegisterForm from "./presentation/auth/register_form";
 import CoursesManagement from "./presentation/pages/courses_management";
-import StudentsManagement from "./presentation/pages/student_management";
+import StudentsManagement from "./presentation/pages/student/student_management";
 import TeacherManagement from "./presentation/pages/teacher_management";
 import Layout from "./presentation/componentes/layout";
+import StudentForm from "./presentation/pages/student/add-edit_student";
 
 const theme = createTheme({
   palette: {
@@ -87,10 +88,18 @@ const App = () => {
             }
           />
           <Route
-            path="/students/new"
+            path="/add-student"
             element={
               <Layout>
-                <StudentsManagement />
+                <StudentForm></StudentForm>
+              </Layout>
+            }
+          />
+          <Route
+            path="/edit-student/:id"
+            element={
+              <Layout>
+                <StudentForm />
               </Layout>
             }
           />

@@ -54,7 +54,7 @@ const Sidebar = () => {
             submenu: true,
             submenuItems: [
                 { text: "View All", path: "/students" },
-                { text: "Add New", path: "/students/new" },
+                { text: "Add New", path: "/add-student" }
                 // { text: "Attendance", path: "/students/attendance" },
             ]
         },
