@@ -36,7 +36,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/" element={<Navigate to="/students" />}></Route>
 
           {/* Routes that require layout with sidebar */}
           <Route

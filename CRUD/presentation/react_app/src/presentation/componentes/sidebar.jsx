@@ -55,7 +55,6 @@ const Sidebar = () => {
             submenuItems: [
                 { text: "View All", path: "/students" },
                 { text: "Add New", path: "/add-student" }
-                // { text: "Attendance", path: "/students/attendance" },
             ]
         },
         {
@@ -65,18 +64,12 @@ const Sidebar = () => {
             submenuItems: [
                 { text: "All Courses", path: "/courses" },
                 { text: "Add Course", path: "/courses/new" },
-                // { text: "Categories", path: "/courses/categories" },
             ]
         },
         { text: "Teachers", icon: <TeacherIcon />, path: "/teachers" },
-        // { text: "Calendar", icon: <CalendarMonth />, path: "/calendar" },
-        // { text: "Reports", icon: <Assessment />, path: "/reports" },
-        // { text: "Messages", icon: <Forum />, path: "/messages", badge: 5 },
     ];
 
-    const bottomMenuItems = [
-        // { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
-    ];
+    const bottomMenuItems = [];
 
     return (
         <Drawer
@@ -91,7 +84,8 @@ const Sidebar = () => {
                     overflowX: "hidden",
                     borderRight: "1px solid rgba(0, 0, 0, 0.12)",
                     boxSizing: "border-box",
-                    boxShadow: "0 2px 10px rgba(0, 0, 0, 0.05)",
+                    // Reduced shadow for less visual spacing
+                    boxShadow: "0 1px 4px rgba(0, 0, 0, 0.03)",
                     bgcolor: "background.paper",
                     height: "100vh",
                     position: "fixed"
@@ -129,22 +123,22 @@ const Sidebar = () => {
             <Divider />
 
             {isOpen && (
-                <Box sx={{ p: 2, display: "flex", alignItems: "center" }}>
-                    <Avatar sx={{ width: 40, height: 40, bgcolor: "primary.main", mr: 2 }}>A</Avatar>
+                <Box sx={{ p: 1.5, display: "flex", alignItems: "center" }}>
+                    <Avatar sx={{ width: 36, height: 36, bgcolor: "primary.main", mr: 1.5 }}>A</Avatar>
                     <Box>
-                        <Typography variant="subtitle1" sx={{ fontWeight: "medium" }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: "medium" }}>
                             Admin User
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" color="text.secondary" sx={{ fontSize: "0.75rem" }}>
                             Administrator
                         </Typography>
                     </Box>
                 </Box>
             )}
 
-            <Divider sx={{ mb: 1 }} />
+            <Divider sx={{ mb: 0.5 }} />
 
-            <List sx={{ px: 1, flexGrow: 1, overflow: "auto" }}>
+            <List sx={{ px: 0.5, flexGrow: 1, overflow: "auto" }}>
                 {mainMenuItems.map((item) => (
                     <React.Fragment key={item.text}>
                         <ListItem disablePadding>
@@ -152,10 +146,10 @@ const Sidebar = () => {
                                 <ListItemButton
                                     onClick={() => handleSubmenuToggle(item.text)}
                                     sx={{
-                                        minHeight: 48,
+                                        minHeight: 42,
                                         justifyContent: isOpen ? "initial" : "center",
-                                        px: 2.5,
-                                        borderRadius: "8px",
+                                        px: 2,
+                                        borderRadius: "6px",
                                         mb: 0.5,
                                         '&:hover': {
                                             bgcolor: 'action.hover',
@@ -165,7 +159,7 @@ const Sidebar = () => {
                                     <ListItemIcon
                                         sx={{
                                             minWidth: 0,
-                                            mr: isOpen ? 3 : "auto",
+                                            mr: isOpen ? 2 : "auto",
                                             justifyContent: "center",
                                             color: openSubmenu === item.text ? "primary.main" : "inherit"
                                         }}
@@ -180,6 +174,7 @@ const Sidebar = () => {
                                         <>
                                             <ListItemText
                                                 primary={item.text}
+                                                primaryTypographyProps={{ fontSize: "0.9rem" }}
                                                 sx={{ color: openSubmenu === item.text ? "primary.main" : "inherit" }}
                                             />
                                             {openSubmenu === item.text ? <ExpandLess /> : <ExpandMore />}
@@ -192,10 +187,10 @@ const Sidebar = () => {
                                     to={item.path}
                                     selected={isActive(item.path)}
                                     sx={{
-                                        minHeight: 48,
+                                        minHeight: 42,
                                         justifyContent: isOpen ? "initial" : "center",
-                                        px: 2.5,
-                                        borderRadius: "8px",
+                                        px: 2,
+                                        borderRadius: "6px",
                                         mb: 0.5,
                                         bgcolor: isActive(item.path) ? "action.selected" : "transparent",
                                         '&:hover': {
@@ -206,7 +201,7 @@ const Sidebar = () => {
                                     <ListItemIcon
                                         sx={{
                                             minWidth: 0,
-                                            mr: isOpen ? 3 : "auto",
+                                                mr: isOpen ? 2 : "auto",
                                             justifyContent: "center",
                                             color: isActive(item.path) ? "primary.main" : "inherit"
                                         }}
@@ -220,6 +215,7 @@ const Sidebar = () => {
                                     {isOpen && (
                                         <ListItemText
                                             primary={item.text}
+                                                primaryTypographyProps={{ fontSize: "0.9rem" }}
                                             sx={{ color: isActive(item.path) ? "primary.main" : "inherit" }}
                                         />
                                     )}
@@ -237,11 +233,11 @@ const Sidebar = () => {
                                             to={subItem.path}
                                             selected={isActive(subItem.path)}
                                             sx={{
-                                                pl: 6,
-                                                py: 0.5,
-                                                borderRadius: "8px",
-                                                ml: 2,
-                                                mb: 0.5,
+                                                pl: 5,
+                                                py: 0.3,
+                                                borderRadius: "6px",
+                                                ml: 1.5,
+                                                mb: 0.3,
                                                 bgcolor: isActive(subItem.path) ? "action.selected" : "transparent",
                                                 '&:hover': {
                                                     bgcolor: 'action.hover',
@@ -252,6 +248,7 @@ const Sidebar = () => {
                                                 primary={subItem.text}
                                                 primaryTypographyProps={{
                                                     variant: "body2",
+                                                    fontSize: "0.8rem",
                                                     color: isActive(subItem.path) ? "primary.main" : "inherit"
                                                 }}
                                             />
@@ -266,9 +263,9 @@ const Sidebar = () => {
 
             <Box sx={{ flexGrow: 0 }} />
 
-            <Divider sx={{ mt: 1 }} />
+            <Divider sx={{ mt: 0.5 }} />
 
-            <List sx={{ px: 1 }}>
+            <List sx={{ px: 0.5 }}>
                 {bottomMenuItems.map((item) => (
                     <ListItem key={item.text} disablePadding>
                         <ListItemButton
@@ -276,10 +273,10 @@ const Sidebar = () => {
                             to={item.path}
                             selected={isActive(item.path)}
                             sx={{
-                                minHeight: 48,
+                                minHeight: 42,
                                 justifyContent: isOpen ? "initial" : "center",
-                                px: 2.5,
-                                borderRadius: "8px",
+                                px: 2,
+                                borderRadius: "6px",
                                 mb: 0.5,
                                 bgcolor: isActive(item.path) ? "action.selected" : "transparent",
                                 '&:hover': {
@@ -290,7 +287,7 @@ const Sidebar = () => {
                             <ListItemIcon
                                 sx={{
                                     minWidth: 0,
-                                    mr: isOpen ? 3 : "auto",
+                                    mr: isOpen ? 2 : "auto",
                                     justifyContent: "center",
                                     color: isActive(item.path) ? "primary.main" : "inherit"
                                 }}
@@ -300,6 +297,7 @@ const Sidebar = () => {
                             {isOpen && (
                                 <ListItemText
                                     primary={item.text}
+                                    primaryTypographyProps={{ fontSize: "0.9rem" }}
                                     sx={{ color: isActive(item.path) ? "primary.main" : "inherit" }}
                                 />
                             )}

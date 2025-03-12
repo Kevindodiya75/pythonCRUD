@@ -9,8 +9,9 @@ export const LayoutContext = createContext();
 
 export const useLayout = () => useContext(LayoutContext);
 
-const drawerOpenWidth = 240;
-const drawerClosedWidth = 72;
+// Reducing drawer width slightly to make content closer
+const drawerOpenWidth = 230;
+const drawerClosedWidth = 65;
 
 const Layout = ({ children }) => {
     const [isOpen, setIsOpen] = useState(true);
@@ -21,7 +22,6 @@ const Layout = ({ children }) => {
             if (window.innerWidth < 768) {
                 setIsOpen(false);
             } else if (window.innerWidth > 1200) {
-
                 setIsOpen(true);
             }
         };
@@ -53,20 +53,24 @@ const Layout = ({ children }) => {
                         minHeight: "100vh",
                         width: {
                             xs: "100%",
-                            sm: `calc(100% - ${isOpen ? drawerOpenWidth : drawerClosedWidth}px)`
+                            // Adding a negative margin to pull content closer to sidebar
+                            sm: `calc(100% - ${isOpen ? drawerOpenWidth - 10 : drawerClosedWidth - 5}px)`
                         },
                         ml: {
                             xs: 0,
-                            sm: `${isOpen ? drawerOpenWidth : drawerClosedWidth}px`
+                            // Adding a negative margin to pull content closer to sidebar
+                            sm: `${isOpen ? drawerOpenWidth - 10 : drawerClosedWidth - 5}px`
                         },
-                        transition: "margin-left 0.3s, width 0.3s"
+                        transition: "margin-left 0.3s, width 0.3s",
                     }}
                 >
                     <Toolbar />
                     <Box
                         sx={{
                             flexGrow: 1,
-                            p: { xs: 2, sm: 3 },
+                            // Minimized padding to reduce the gap
+                            p: { xs: 0.5, sm: 1 },
+                            pl: { xs: 0.5, sm: 0.5 }, // Even smaller padding on the left
                             maxWidth: "100%",
                             overflowX: "auto"
                         }}
