@@ -39,7 +39,7 @@ urlpatterns = [
     path('api/courses/<int:course_id>/', get_course_api, name='get_course_api'),
     path('api/courses/update/<int:course_id>/', update_course_api, name='update_course_api'),
     path('api/courses/delete/<int:course_id>/', delete_course_api, name='delete_course_api'),
-
+    # API endpoints for Teachers:
     path('api/teachers/getall/', get_all_teachers_api, name='get_all_teachers_api'),
     path('api/teachers/get/<int:teacher_id>/', get_teacher_api, name='get_teacher_api'),
     path('api/teachers/add/', add_teacher_api, name='add_teacher_api'),
