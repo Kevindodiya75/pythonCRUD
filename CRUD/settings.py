@@ -10,6 +10,7 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 # Include React build static assets in Django's static files lookup
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, "CRUD", "presentation", "react_app", "build", "static"),
