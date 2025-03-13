@@ -9,9 +9,8 @@ def create_user(email, username, password, userrole):
     else:
         new_id = 1  
 
-    # Pass the new_id explicitly if your model expects it
     user = auth_model.objects.create(
-        id=new_id,  # Remove this if your model uses auto-generated primary keys
+        id=new_id,  
         email=email, 
         username=username, 
         password=hashed_password, 

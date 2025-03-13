@@ -1,7 +1,6 @@
 from CRUD.data.models.teacher_model import teacher_model
 
 def get_all_teachers_all():
-    """Return all teacher records without filtering by user."""
     return teacher_model.objects.all()
 
 def get_all_teachers(created_by):

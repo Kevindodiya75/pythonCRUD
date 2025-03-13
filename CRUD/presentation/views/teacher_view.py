@@ -9,12 +9,9 @@ from CRUD.domain.usecases.teacher_usecase import (
     delete_teacher_usecase
 )
 
+
 @csrf_exempt
 def get_all_teachers_api(request):
-    """
-    GET /api/teachers/getall/
-    Returns the full list of teachers.
-    """
     if request.method == 'GET':
         try:
             teachers = list_all_teachers_usecase()
@@ -34,11 +31,9 @@ def get_all_teachers_api(request):
     else:
         return JsonResponse({"error": "GET method required."}, status=405)
 
+
 @csrf_exempt
 def get_teacher_api(request, teacher_id):
-    """
-    GET /api/teachers/get/<teacher_id>/
-    """
     if request.method == 'GET':
         try:
             teacher = get_teacher_usecase(teacher_id)
@@ -55,12 +50,9 @@ def get_teacher_api(request, teacher_id):
     else:
         return JsonResponse({"error": "GET method required."}, status=405)
 
+
 @csrf_exempt
 def add_teacher_api(request):
-    """
-    POST /api/teachers/add/
-    Expects JSON payload with keys: name, email, subject, created_by.
-    """
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -84,12 +76,9 @@ def add_teacher_api(request):
     else:
         return JsonResponse({"error": "POST method required."}, status=405)
 
+
 @csrf_exempt
 def update_teacher_api(request, teacher_id):
-    """
-    PUT /api/teachers/update/<teacher_id>/
-    Expects JSON payload with keys: name, email, subject.
-    """
     if request.method == 'PUT':
         try:
             data = json.loads(request.body)
@@ -110,11 +99,9 @@ def update_teacher_api(request, teacher_id):
     else:
         return JsonResponse({"error": "PUT method required."}, status=405)
 
+
 @csrf_exempt
 def delete_teacher_api(request, teacher_id):
-    """
-    DELETE /api/teachers/delete/<teacher_id>/
-    """
     if request.method == 'DELETE':
         try:
             delete_teacher_usecase(teacher_id)
