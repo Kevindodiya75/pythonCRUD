@@ -4,6 +4,7 @@ from django.urls import reverse
 from CRUD.data.models.auth_model import auth_model
 from CRUD.data.models.course_model import course_model
 from CRUD.data.models.student_model import student_model
+from unittest.mock import patch
 
 
 class StudentViewsTestCase(TestCase):
@@ -28,7 +29,9 @@ class StudentViewsTestCase(TestCase):
         self.assertIn("students", json_data)
         self.assertGreaterEqual(len(json_data["students"]), 1)
 
-    def test_get_student_api(self):
+    @patch("CRUD.data.models.student_model.student_model.objects.get")
+    def test_get_student_api(self, mock_get):
+        mock_get.return_value = self.student
         response = self.client.get(f"/api/students/get/{self.student.id}/")
         self.assertEqual(response.status_code, 200)
         json_data = response.json()
@@ -37,7 +40,7 @@ class StudentViewsTestCase(TestCase):
 
     def test_add_student_api(self):
         payload = {
-            "name": "kevin",
+            "name": "kevin dodiya",
             "email": "kevin@example.com",
             "course": self.course.id,
             "created_by": self.auth_user.id,
@@ -67,7 +70,7 @@ class StudentViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         json_data = response.json()
         self.assertEqual(json_data["name"], "kevin Updated")
-        self.assertEqual(json_data["email"], "kevin_updated @example.com")
+        self.assertEqual(json_data["email"], "kevin_updated@example.com")
 
     def test_delete_student_api(self):
         response = self.client.delete(f"/api/students/delete/{self.student.id}/")

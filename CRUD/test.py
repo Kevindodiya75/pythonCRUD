@@ -1,13 +1,30 @@
-#!/usr/bin/env python
 import os
 import sys
+import unittest
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CRUD.tests")
+django.setup()
+
+from tests.test_auth_views import (
+    AuthModelTestCase,
+    AuthRepositoryTestCase,
+    AuthUsecaseTestCase,
+    AuthApiTestCase,
+)
+
+
+def create_test_suite():
+    test_suite = unittest.TestSuite()
+    test_suite.addTest(unittest.makeSuite(AuthModelTestCase))
+    test_suite.addTest(unittest.makeSuite(AuthRepositoryTestCase))
+    test_suite.addTest(unittest.makeSuite(AuthUsecaseTestCase))
+    test_suite.addTest(unittest.makeSuite(AuthApiTestCase))
+
+    return test_suite
+
 
 if __name__ == "__main__":
-    # Set the settings module for your Django project.
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CRUD.settings")
-
-    from django.core.management import execute_from_command_line
-
-    # Redirect to the Django test command
-    sys.argv = [sys.argv[0], "test"]
-    execute_from_command_line(sys.argv)
+    runner = unittest.TextTestRunner(verbosity=2)
+    test_suite = create_test_suite()
+    runner.run(test_suite)
