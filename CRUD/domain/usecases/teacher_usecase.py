@@ -7,6 +7,7 @@ from CRUD.domain.repositories.teacher_repository import (
     get_teacher_by_id,
 )
 
+
 def list_all_teachers_usecase():
     teachers = get_all_teachers_all()
     return [
@@ -15,10 +16,11 @@ def list_all_teachers_usecase():
             name=t.name,
             email=t.email,
             subject=t.subject,
-            created_by=t.created_by_id
+            created_by=t.created_by_id,
         )
         for t in teachers
     ]
+
 
 def get_teacher_usecase(teacher_id):
     teacher = get_teacher_by_id(teacher_id)
@@ -27,8 +29,9 @@ def get_teacher_usecase(teacher_id):
         name=teacher.name,
         email=teacher.email,
         subject=teacher.subject,
-        created_by=teacher.created_by_id
+        created_by=teacher.created_by_id,
     )
+
 
 def create_teacher_usecase(name, email, subject, created_by):
     teacher = create_teacher(name, email, subject, created_by)
@@ -37,8 +40,9 @@ def create_teacher_usecase(name, email, subject, created_by):
         name=teacher.name,
         email=teacher.email,
         subject=teacher.subject,
-        created_by=teacher.created_by_id
+        created_by=teacher.created_by_id,
     )
+
 
 def update_teacher_usecase(teacher_id, name, email, subject):
     teacher = update_teacher(teacher_id, name, email, subject)
@@ -47,8 +51,9 @@ def update_teacher_usecase(teacher_id, name, email, subject):
         name=teacher.name,
         email=teacher.email,
         subject=teacher.subject,
-        created_by=teacher.created_by_id
+        created_by=teacher.created_by_id,
     )
+
 
 def delete_teacher_usecase(teacher_id):
     delete_teacher(teacher_id)

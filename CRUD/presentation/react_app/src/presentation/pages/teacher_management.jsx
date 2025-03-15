@@ -36,7 +36,7 @@ const TeacherManagement = () => {
       setMessage("Teacher added successfully.");
       setNewTeacher({ name: '', email: '', subject: '' });
       setModalMode(null);
-      loadTeachers(); 
+      loadTeachers();
     } catch (error) {
       console.error("Error adding teacher:", error);
       setMessage("Error adding teacher.");
@@ -50,7 +50,7 @@ const TeacherManagement = () => {
       setMessage("Teacher updated successfully.");
       setUpdateTeacherData(null);
       setModalMode(null);
-      loadTeachers(); 
+      loadTeachers();
     } catch (error) {
       console.error("Error updating teacher:", error);
       setMessage("Error updating teacher.");

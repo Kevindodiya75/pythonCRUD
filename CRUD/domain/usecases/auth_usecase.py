@@ -1,4 +1,3 @@
-
 from CRUD.domain.repositories.auth_repository import (
     get_user_by_email,
     create_user,
@@ -8,17 +7,19 @@ from CRUD.domain.repositories.auth_repository import (
 from CRUD.domain.entities.user_entity import AuthEntity
 from django.contrib.auth.hashers import check_password
 
+
 def register_user(email, username, password, userrole):
     if get_user_by_email(email):
         raise Exception("User with this email already exists.")
-    user = create_user(email, username, password, userrole)  
+    user = create_user(email, username, password, userrole)
     return AuthEntity(
-        id=user.id, 
-        email=user.email, 
-        username=user.username,  
-        password=user.password, 
-        userrole=user.userrole
+        id=user.id,
+        email=user.email,
+        username=user.username,
+        password=user.password,
+        userrole=user.userrole,
     )
+
 
 def login_user(email, password):
     user = get_user_by_email(email)
@@ -26,20 +27,23 @@ def login_user(email, password):
         return AuthEntity(
             id=user.id,
             email=user.email,
-            username=user.username, 
+            username=user.username,
             password=user.password,
-            userrole=user.userrole
+            userrole=user.userrole,
         )
     else:
         raise Exception("Invalid credentials.")
 
 
 def update_user_usecase(user_id, email, password, userrole):
-    
+
     user = update_user(user_id, email, password, userrole)
-    return AuthEntity(id=user.id, email=user.email, password=user.password, userrole=user.userrole)
+    return AuthEntity(
+        id=user.id, email=user.email, password=user.password, userrole=user.userrole
+    )
+
 
 def delete_user_usecase(user_id):
-    
+
     delete_user(user_id)
     return True

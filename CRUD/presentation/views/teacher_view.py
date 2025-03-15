@@ -6,13 +6,13 @@ from CRUD.domain.usecases.teacher_usecase import (
     get_teacher_usecase,
     create_teacher_usecase,
     update_teacher_usecase,
-    delete_teacher_usecase
+    delete_teacher_usecase,
 )
 
 
 @csrf_exempt
 def get_all_teachers_api(request):
-    if request.method == 'GET':
+    if request.method == "GET":
         try:
             teachers = list_all_teachers_usecase()
             data = [
@@ -21,7 +21,7 @@ def get_all_teachers_api(request):
                     "name": teacher.name,
                     "email": teacher.email,
                     "subject": teacher.subject,
-                    "created_by": teacher.created_by
+                    "created_by": teacher.created_by,
                 }
                 for teacher in teachers
             ]
@@ -34,7 +34,7 @@ def get_all_teachers_api(request):
 
 @csrf_exempt
 def get_teacher_api(request, teacher_id):
-    if request.method == 'GET':
+    if request.method == "GET":
         try:
             teacher = get_teacher_usecase(teacher_id)
             data = {
@@ -42,7 +42,7 @@ def get_teacher_api(request, teacher_id):
                 "name": teacher.name,
                 "email": teacher.email,
                 "subject": teacher.subject,
-                "created_by": teacher.created_by
+                "created_by": teacher.created_by,
             }
             return JsonResponse(data, status=200)
         except Exception as e:
@@ -53,7 +53,7 @@ def get_teacher_api(request, teacher_id):
 
 @csrf_exempt
 def add_teacher_api(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
             data = json.loads(request.body)
             name = data.get("name")
@@ -68,7 +68,7 @@ def add_teacher_api(request):
                 "name": teacher.name,
                 "email": teacher.email,
                 "subject": teacher.subject,
-                "created_by": teacher.created_by
+                "created_by": teacher.created_by,
             }
             return JsonResponse(response_data, status=201)
         except Exception as e:
@@ -79,7 +79,7 @@ def add_teacher_api(request):
 
 @csrf_exempt
 def update_teacher_api(request, teacher_id):
-    if request.method == 'PUT':
+    if request.method == "PUT":
         try:
             data = json.loads(request.body)
             name = data.get("name")
@@ -91,7 +91,7 @@ def update_teacher_api(request, teacher_id):
                 "name": teacher.name,
                 "email": teacher.email,
                 "subject": teacher.subject,
-                "created_by": teacher.created_by
+                "created_by": teacher.created_by,
             }
             return JsonResponse(response_data, status=200)
         except Exception as e:
@@ -102,7 +102,7 @@ def update_teacher_api(request, teacher_id):
 
 @csrf_exempt
 def delete_teacher_api(request, teacher_id):
-    if request.method == 'DELETE':
+    if request.method == "DELETE":
         try:
             delete_teacher_usecase(teacher_id)
             return JsonResponse({"message": "Teacher deleted successfully"}, status=200)

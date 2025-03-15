@@ -12,7 +12,6 @@ export const register = async (username, email, role, password1, password2) => {
   if (password1 !== password2) {
     throw new Error("Passwords do not match");
   }
-  
+
   return await registerApi(username, email, role, password1);
 };
-

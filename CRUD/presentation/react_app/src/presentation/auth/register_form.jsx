@@ -66,7 +66,7 @@ const RegisterForm = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: '100vh', 
+        minHeight: '100vh',
         padding: '2rem 0',
         background: 'linear-gradient(135deg, #f0f4ff 0%, #a8dadc 100%)',
       }}
@@ -82,7 +82,7 @@ const RegisterForm = () => {
           sx={{
             p: 4,
             width: '90%',
-            maxWidth: 800, 
+            maxWidth: 800,
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(12px)',
             borderRadius: '16px',

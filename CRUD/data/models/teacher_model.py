@@ -1,6 +1,7 @@
 from django.db import models
 from CRUD.data.models.auth_model import auth_model
 
+
 class teacher_model(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -12,4 +13,4 @@ class teacher_model(models.Model):
         return self.name
 
     class Meta:
-        app_label = 'CRUD'
+        app_label = "CRUD"

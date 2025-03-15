@@ -7,14 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('CRUD', '0007_alter_auth_model_username'),
+        ("CRUD", "0007_alter_auth_model_username"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='student_model',
-            name='created_by',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='CRUD.auth_model'),
+            model_name="student_model",
+            name="created_by",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="CRUD.auth_model",
+            ),
             preserve_default=False,
         ),
     ]

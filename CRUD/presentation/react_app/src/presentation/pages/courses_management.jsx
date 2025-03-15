@@ -5,8 +5,8 @@ const CoursesManagement = () => {
   const [courses, setCourses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [newCourseName, setNewCourseName] = useState('');
-  const [updateData, setUpdateData] = useState(null); 
-  const [modalMode, setModalMode] = useState(null); 
+  const [updateData, setUpdateData] = useState(null);
+  const [modalMode, setModalMode] = useState(null);
   const [message,   setMessage] = useState('');
 
   const loadCourses = async () => {
@@ -18,8 +18,8 @@ const CoursesManagement = () => {
       setMessage(error.message);
     }
   };
-  
-    
+
+
 
   useEffect(() => {
     loadCourses();

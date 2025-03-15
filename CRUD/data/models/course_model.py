@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class course_model(models.Model):
     coursename = models.CharField(max_length=100)
 
@@ -7,4 +8,4 @@ class course_model(models.Model):
         return self.coursename
 
     class Meta:
-        app_label = 'CRUD'
+        app_label = "CRUD"

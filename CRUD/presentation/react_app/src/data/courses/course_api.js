@@ -8,14 +8,14 @@ export const getCoursesApi = async () => {
     throw new Error('Failed to fetch courses');
   }
   const data = await response.json();
-  
+
   // Adjust based on API response structure
   if (data && data.courses && Array.isArray(data.courses)) {
     return data.courses;
   } else if (Array.isArray(data)) {
     return data;
   } else {
-    return []; 
+    return [];
   }
 };
 

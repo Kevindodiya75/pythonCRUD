@@ -6,22 +6,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('CRUD', '0004_student_model_course'),
+        ("CRUD", "0004_student_model_course"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='auth_model',
+            name="auth_model",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(max_length=254, unique=True)),
-                ('password', models.CharField(max_length=255)),
-                ('userrole', models.CharField(max_length=50)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("email", models.EmailField(max_length=254, unique=True)),
+                ("password", models.CharField(max_length=255)),
+                ("userrole", models.CharField(max_length=50)),
             ],
         ),
         migrations.AlterField(
-            model_name='student_model',
-            name='id',
+            model_name="student_model",
+            name="id",
             field=models.IntegerField(primary_key=True, serialize=False),
         ),
     ]
