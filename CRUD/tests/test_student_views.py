@@ -1,6 +1,5 @@
 import json
 from django.test import TestCase, Client
-from django.urls import reverse
 from CRUD.data.models.auth_model import auth_model
 from CRUD.data.models.course_model import course_model
 from CRUD.data.models.student_model import student_model

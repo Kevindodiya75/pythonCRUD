@@ -6,4 +6,4 @@ class CRUDConfig(AppConfig):
     name = "CRUD"
 
     def ready(self):
-        import CRUD.data.models.student_model
+        pass

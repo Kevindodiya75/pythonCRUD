@@ -1,1 +1,1 @@
-from . import db_signals
+from . import db_signals as db_signals

@@ -1,5 +1,5 @@
 from CRUD.data.models.auth_model import auth_model
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import make_password
 
 
 def create_user(email, username, password, userrole):

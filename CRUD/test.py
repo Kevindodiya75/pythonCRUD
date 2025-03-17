@@ -1,10 +1,6 @@
 import os
-import sys
 import unittest
 import django
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CRUD.tests")
-django.setup()
 
 from tests.test_auth_views import (
     AuthModelTestCase,
@@ -12,6 +8,9 @@ from tests.test_auth_views import (
     AuthUsecaseTestCase,
     AuthApiTestCase,
 )
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CRUD.tests")
+django.setup()
 
 
 def create_test_suite():
