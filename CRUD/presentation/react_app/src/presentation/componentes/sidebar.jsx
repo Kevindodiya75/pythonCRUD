@@ -63,7 +63,7 @@ const Sidebar = () => {
             submenu: true,
             submenuItems: [
                 { text: "All Courses", path: "/courses" },
-                { text: "Add Course", path: "/courses/new" },
+                { text: "Add Course", path: "/add-courses" },
             ]
         },
         { text: "Teachers", icon: <TeacherIcon />, path: "/teachers" },

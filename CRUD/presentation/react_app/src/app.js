@@ -3,11 +3,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { createTheme, ThemeProvider } from "@mui/material";
 import LoginForm from "./presentation/auth/login_form";
 import RegisterForm from "./presentation/auth/register_form";
-import CoursesManagement from "./presentation/pages/courses_management";
 import StudentsManagement from "./presentation/pages/student/student_management";
+import StudentForm from "./presentation/pages/student/add-edit_student";
+import CoursesManagement from "./presentation/pages/courses/courses_management";
+import CoursesForm from "./presentation/pages/courses/add-edit_courses";
 import TeacherManagement from "./presentation/pages/teacher_management";
 import Layout from "./presentation/componentes/layout";
-import StudentForm from "./presentation/pages/student/add-edit_student";
 
 const theme = createTheme({
   palette: {
@@ -36,8 +37,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
-          <Route path="/" element={<Navigate to="/students" />}></Route>
-
+          <Route path="/" element={<Navigate to="/login" />}></Route>
           {/* Routes that require layout with sidebar */}
           <Route
             path="/"
@@ -64,21 +64,22 @@ const App = () => {
             }
           />
           <Route
-            path="/courses/new"
+            path="/add-courses"
             element={
               <Layout>
-                <CoursesManagement />
+                <CoursesForm />
               </Layout>
             }
           />
           <Route
-            path="/courses/categories"
+            path="/edit-courses/:id"
             element={
               <Layout>
-                <CoursesManagement />
+                <CoursesForm />
               </Layout>
             }
           />
+
           <Route
             path="/students"
             element={
