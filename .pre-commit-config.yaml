@@ -4,11 +4,11 @@ repos:
     hooks:
     -   id: check-yaml
     -   id: end-of-file-fixer
-        exclude: ^tests/
+        exclude: ^CRUD/tests/
     -   id: trailing-whitespace
-        exclude: ^tests/
+        exclude: ^CRUD/tests/
 -   repo: https://github.com/psf/black
     rev: 22.10.0
     hooks:
     -   id: black
-        exclude: ^tests/
+        exclude: ^CRUD/tests/
