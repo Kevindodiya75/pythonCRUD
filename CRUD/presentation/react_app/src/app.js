@@ -7,7 +7,8 @@ import StudentsManagement from "./presentation/pages/student/student_management"
 import StudentForm from "./presentation/pages/student/add-edit_student";
 import CoursesManagement from "./presentation/pages/courses/courses_management";
 import CoursesForm from "./presentation/pages/courses/add-edit_courses";
-import TeacherManagement from "./presentation/pages/teacher_management";
+import TeacherManagement from "./presentation/pages/teacher/teacher_management";
+import TeacherForm from "./presentation/pages/teacher/add-edit_teacher";
 import Layout from "./presentation/componentes/layout";
 
 const theme = createTheme({
@@ -40,7 +41,7 @@ const App = () => {
           <Route path="/" element={<Navigate to="/login" />}></Route>
           {/* Routes that require layout with sidebar */}
           <Route
-            path="/"
+            path="/dashboard"
             element={
               <Layout>
                 <Navigate to="/courses" />
@@ -48,7 +49,7 @@ const App = () => {
             }
           />
           <Route
-            path="/dashboard"
+            path="/"
             element={
               <Layout>
                 <Navigate to="/courses" />
@@ -117,6 +118,22 @@ const App = () => {
             element={
               <Layout>
                 <TeacherManagement />
+              </Layout>
+            }
+          />
+          <Route
+            path="/add-teachers"
+            element={
+              <Layout>
+                <TeacherForm />
+              </Layout>
+            }
+          />
+          <Route
+            path="/edit-teachers/:id"
+            element={
+              <Layout>
+                <TeacherForm />
               </Layout>
             }
           />
