@@ -344,13 +344,13 @@ const StudentsList = () => {
                         </TableCell>
                         <TableCell>
                           <Chip
-                            icon={<SchoolIcon />}
+                            icon={<SchoolIcon sx={{ color: '#1976d2' }} />}
                             label={typeof student.course === 'string'
                               ? student.course
                               : getCourseName(student.course)
                             }
                             size="small"
-                            color="secondary"
+                            color="primary"
                             variant="outlined"
                           />
                         </TableCell>
