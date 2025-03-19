@@ -377,6 +377,13 @@ const StudentsList = () => {
                                 whileHover={{ scale: 1.2 }}
                                 whileTap={{ scale: 0.9 }}
                                 size="small"
+                                sx={{
+                                  color: 'primary.main',
+                                  fontSize: '1.1rem',
+                                  '&:hover': {
+                                    color: 'primary.dark',
+                                  }
+                                }}
                               >
                                 <DeleteIcon fontSize="small" />
                               </IconButton>

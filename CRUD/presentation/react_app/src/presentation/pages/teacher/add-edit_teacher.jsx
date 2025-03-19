@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import {
     Container,
+    Paper,
     Typography,
-    Box,
-    Button,
     TextField,
-    Grid,
-    Card,
-    CardContent,
-    CardActions,
-    Divider,
-    Snackbar,
+    Button,
+    Box,
     Alert,
-    CircularProgress
+    Snackbar,
+    CircularProgress,
+    Divider,
+    Fade,
+    Grid,
+    IconButton,
+    Breadcrumbs
 } from '@mui/material';
 import {
     Save as SaveIcon,
-    ArrowBack as ArrowBackIcon
+    Cancel as CancelIcon,
+    ArrowBack as ArrowBackIcon,
+    Person as PersonIcon,
+    Email as EmailIcon,
+    Book as BookIcon,
+    NavigateNext as NavigateNextIcon
 } from '@mui/icons-material';
 import { addTeacher, modifyTeacher, fetchTeacherById } from '../../../domain/teacher/teacher';
 
@@ -27,14 +34,13 @@ const TeacherForm = () => {
     const isEditMode = !!id;
 
     const [loading, setLoading] = useState(isEditMode);
-    const [teacher, setTeacher] = useState({
+    const [submitLoading, setSubmitLoading] = useState(false);
+    const [formData, setFormData] = useState({
         name: '',
         email: '',
         subject: ''
     });
-    const [errors, setErrors] = useState({});
-    const [message, setMessage] = useState('');
-    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [alert, setAlert] = useState({ open: false, message: '', severity: 'info' });
 
     useEffect(() => {
         const loadTeacher = async () => {
@@ -42,11 +48,9 @@ const TeacherForm = () => {
                 try {
                     setLoading(true);
                     const data = await fetchTeacherById(id);
-                    setTeacher(data);
+                    setFormData(data);
                 } catch (error) {
-                    console.error("Error fetching teacher:", error);
-                    setMessage("Error loading teacher data.");
-                    setOpenSnackbar(true);
+                    showAlert("Error loading teacher data.", "error");
                 } finally {
                     setLoading(false);
                 }
@@ -56,74 +60,75 @@ const TeacherForm = () => {
         loadTeacher();
     }, [id, isEditMode]);
 
-    const validateForm = () => {
-        const newErrors = {};
-
-        if (!teacher.name.trim()) {
-            newErrors.name = "Name is required";
-        }
-
-        if (!teacher.email.trim()) {
-            newErrors.email = "Email is required";
-        } else if (!/\S+@\S+\.\S+/.test(teacher.email)) {
-            newErrors.email = "Email is invalid";
-        }
-
-        if (!teacher.subject.trim()) {
-            newErrors.subject = "Subject is required";
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+    const showAlert = (message, severity = 'info') => {
+        setAlert({ open: true, message, severity });
     };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setTeacher(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
+    const handleCloseAlert = () => {
+        setAlert({ ...alert, open: false });
+    };
 
-        // Clear error for this field when user starts typing
-        if (errors[name]) {
-            setErrors({
-                ...errors,
-                [name]: undefined
-            });
-        }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
+        setSubmitLoading(true);
 
         try {
             if (isEditMode) {
-                await modifyTeacher(id, teacher);
-                setMessage("Teacher updated successfully!");
+                await modifyTeacher(id, formData);
+                showAlert("Teacher updated successfully", "success");
             } else {
-                await addTeacher(teacher);
-                setMessage("Teacher added successfully!");
+                await addTeacher(formData);
+                showAlert("Teacher added successfully", "success");
             }
 
-            setOpenSnackbar(true);
-
-            // Return to list after short delay
+            // Redirect back to teachers list after short delay
             setTimeout(() => {
                 navigate('/teachers');
-            }, 1500);
+            }, 2000);
         } catch (error) {
-            console.error("Error saving teacher:", error);
-            setMessage(isEditMode ? "Error updating teacher." : "Error adding teacher.");
-            setOpenSnackbar(true);
+            showAlert(error.message || "An error occurred", "error");
+        } finally {
+            setSubmitLoading(false);
         }
     };
 
-    const handleCloseSnackbar = () => {
-        setOpenSnackbar(false);
+    const handleCancel = () => {
+        navigate('/teachers');
+    };
+
+    // Animation variants
+    const containerVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.5,
+                when: "beforeChildren",
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                type: "spring",
+                stiffness: 100,
+                damping: 12
+            }
+        }
     };
 
     if (loading) {
@@ -135,104 +140,161 @@ const TeacherForm = () => {
     }
 
     return (
-        <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-            <Card elevation={3}>
-                <CardContent>
-                    <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
-                        <Button
-                            component={Link}
-                            to="/teachers"
-                            startIcon={<ArrowBackIcon />}
+        <Container maxWidth="md">
+            <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+            >
+                <Paper
+                    elevation={3}
+                    sx={{ mt: 5, p: 4, borderRadius: 2 }}
+                    component={motion.div}
+                    layoutId="teacherForm"
+                >
+                    <Box sx={{ mb: 3 }}>
+                        <Breadcrumbs
+                            separator={<NavigateNextIcon fontSize="small" />}
+                            aria-label="breadcrumb"
+                        >
+                            <Link
+                                underline="hover"
+                                color="inherit"
+                                href="/teachers"
+                                sx={{ display: 'flex', alignItems: 'center' }}
+                            >
+                                <PersonIcon sx={{ mr: 0.5 }} fontSize="small" />
+                                Teachers
+                            </Link>
+                            <Typography color="text.primary" sx={{ display: 'flex', alignItems: 'center' }}>
+                                {isEditMode ? 'Edit Teacher' : 'New Teacher'}
+                            </Typography>
+                        </Breadcrumbs>
+                    </Box>
+
+                    <Box display="flex" alignItems="center" mb={3}>
+                        <IconButton
+                            color="primary"
+                            component={motion.button}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={handleCancel}
                             sx={{ mr: 2 }}
                         >
-                            Back
-                        </Button>
-                        <Typography variant="h4" component="h1">
-                            {isEditMode ? 'Edit Teacher' : 'Add New Teacher'}
+                            <ArrowBackIcon />
+                        </IconButton>
+                        <Typography variant="h5" component="h1" fontWeight="bold">
+                            {isEditMode ? 'Update Teacher' : 'Add New Teacher'}
                         </Typography>
                     </Box>
 
-                    <Divider sx={{ mb: 3 }} />
+                    <Divider sx={{ mb: 4 }} />
 
-                    <Box component="form" onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
                         <Grid container spacing={3}>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} component={motion.div} variants={itemVariants}>
                                 <TextField
                                     fullWidth
-                                    label="Name"
+                                    id="name"
                                     name="name"
-                                    value={teacher.name}
-                                    onChange={handleChange}
-                                    error={!!errors.name}
-                                    helperText={errors.name}
-                                    required
+                                    label="Teacher Name"
                                     variant="outlined"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    required
+                                    InputProps={{
+                                        startAdornment: <PersonIcon color="action" sx={{ mr: 1 }} />,
+                                    }}
                                 />
                             </Grid>
 
-                            <Grid item xs={12}>
+                            <Grid item xs={12} component={motion.div} variants={itemVariants}>
                                 <TextField
                                     fullWidth
-                                    label="Email"
+                                    id="email"
                                     name="email"
+                                    label="Teacher Email"
                                     type="email"
-                                    value={teacher.email}
-                                    onChange={handleChange}
-                                    error={!!errors.email}
-                                    helperText={errors.email}
-                                    required
                                     variant="outlined"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    required
+                                    InputProps={{
+                                        startAdornment: <EmailIcon color="action" sx={{ mr: 1 }} />,
+                                    }}
                                 />
                             </Grid>
 
-                            <Grid item xs={12}>
+                            <Grid item xs={12} component={motion.div} variants={itemVariants}>
                                 <TextField
                                     fullWidth
-                                    label="Subject"
+                                    id="subject"
                                     name="subject"
-                                    value={teacher.subject}
-                                    onChange={handleChange}
-                                    error={!!errors.subject}
-                                    helperText={errors.subject}
-                                    required
+                                    label="Subject"
                                     variant="outlined"
+                                    value={formData.subject}
+                                    onChange={handleInputChange}
+                                    required
+                                    InputProps={{
+                                        startAdornment: <BookIcon color="action" sx={{ mr: 1 }} />,
+                                    }}
                                 />
+                            </Grid>
+
+                            <Grid item xs={12} component={motion.div} variants={itemVariants}>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                        gap: 2,
+                                        mt: 2
+                                    }}
+                                >
+                                    <Button
+                                        variant="outlined"
+                                        color="inherit"
+                                        onClick={handleCancel}
+                                        startIcon={<CancelIcon />}
+                                        component={motion.button}
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={submitLoading}
+                                        startIcon={submitLoading ? <CircularProgress size={20} /> : <SaveIcon />}
+                                        component={motion.button}
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        {submitLoading ? 'Processing...' : isEditMode ? 'Update Teacher' : 'Add Teacher'}
+                                    </Button>
+                                </Box>
                             </Grid>
                         </Grid>
-
-                        <CardActions sx={{ justifyContent: 'flex-end', mt: 3 }}>
-                            <Button
-                                type="button"
-                                variant="outlined"
-                                onClick={() => navigate('/teachers')}
-                                sx={{ mr: 1 }}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                startIcon={<SaveIcon />}
-                            >
-                                {isEditMode ? 'Update Teacher' : 'Add Teacher'}
-                            </Button>
-                        </CardActions>
-                    </Box>
-                </CardContent>
-            </Card>
+                    </form>
+                </Paper>
+            </motion.div>
 
             <Snackbar
-                open={openSnackbar}
+                open={alert.open}
                 autoHideDuration={6000}
-                onClose={handleCloseSnackbar}
+                onClose={handleCloseAlert}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                TransitionComponent={Fade}
             >
                 <Alert
-                    onClose={handleCloseSnackbar}
-                    severity="success"
+                    onClose={handleCloseAlert}
+                    severity={alert.severity}
+                    variant="filled"
+                    elevation={6}
                     sx={{ width: '100%' }}
                 >
-                    {message}
+                    {alert.message}
                 </Alert>
             </Snackbar>
         </Container>

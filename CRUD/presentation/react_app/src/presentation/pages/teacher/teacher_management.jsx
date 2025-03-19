@@ -195,27 +195,7 @@ const TeacherTable = () => {
                 <SchoolIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
                 Teacher Management
               </Typography>
-              <Box>
-                <Button
-                  component={Link}
-                  to="/students"
-                  variant="outlined"
-                  color="primary"
-                  startIcon={<PersonIcon />}
-                  sx={{ mr: 1 }}
-                >
-                  Students
-                </Button>
-                <Button
-                  component={Link}
-                  to="/courses"
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={<BookIcon />}
-                >
-                  Courses
-                </Button>
-              </Box>
+
             </Toolbar>
           </AppBar>
 
@@ -340,10 +320,10 @@ const TeacherTable = () => {
                         </TableCell>
                         <TableCell>
                           <Chip
-                            icon={<BookIcon />}
+                            icon={<BookIcon sx={{ color: 'primary.main' }} />}
                             label={teacher.subject}
                             size="small"
-                            color="secondary"
+                            color="primary"
                             variant="outlined"
                           />
                         </TableCell>

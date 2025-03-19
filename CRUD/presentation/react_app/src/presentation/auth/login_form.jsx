@@ -279,10 +279,10 @@ const LoginForm = () => {
                 underline="hover"
                 sx={{
                   fontWeight: 700,
-                  color: 'secondary.main',
+                  color: 'primary.main',
                   fontSize: '1.1rem',
                   '&:hover': {
-                    color: 'secondary.dark',
+                    color: 'primary.dark',
                   }
                 }}
               >
