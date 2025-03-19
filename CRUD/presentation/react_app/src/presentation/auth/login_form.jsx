@@ -137,14 +137,14 @@ const LoginForm = () => {
           }}
         >
           <Typography
-            variant="h3"
+            variant="h4"
             component="h1"
             textAlign="center"
             gutterBottom
             sx={{
               fontWeight: 800,
               color: 'primary.main',
-              mb: 4,
+              mb: 2,
               letterSpacing: '-0.5px',
             }}
           >

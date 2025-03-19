@@ -354,10 +354,10 @@ const RegisterForm = () => {
                 underline="hover"
                 sx={{
                   fontWeight: 700,
-                  color: 'secondary.main',
-                  fontSize: '1rem',
+                  color: 'primary.main',
+                  fontSize: '1.1rem',
                   '&:hover': {
-                    color: 'secondary.dark',
+                    color: 'primary.dark',
                   }
                 }}
               >
