@@ -378,7 +378,7 @@ const StudentsList = () => {
                                 whileTap={{ scale: 0.9 }}
                                 size="small"
                                 sx={{
-                                  color: 'primary.main',
+                                  color: 'secondary.main',
                                   fontSize: '1.1rem',
                                   '&:hover': {
                                     color: 'primary.dark',
