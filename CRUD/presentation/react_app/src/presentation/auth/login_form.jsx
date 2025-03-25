@@ -27,7 +27,10 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Ensure button is disabled immediately
     setIsSubmitting(true);
+
     try {
       const data = await login(email, password);
       localStorage.setItem("user", JSON.stringify(data));
@@ -39,6 +42,7 @@ const LoginForm = () => {
     } catch (error) {
       addMessage('error', error.message);
     } finally {
+      // Re-enable button after submission completes
       setIsSubmitting(false);
     }
   };
