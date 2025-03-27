@@ -1,25 +1,30 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
 import App from "../App";
 
-// Mock the LoginForm component
-jest.mock("../presentation/auth/login_form", () => {
-  return function MockLoginForm() {
-    return <div data-testid="login-form">Mocked Login Form</div>;
-  };
-});
-
 describe("App Component", () => {
-  test("renders the app without crashing and displays the login form", () => {
-    render(
-      <MemoryRouter initialEntries={["/login"]}>
-        <App />
-      </MemoryRouter>
-    );
+  test("renders without crashing", () => {
+    render(<App />);
+  });
 
-    // Check if the mocked login form is rendered
-    const loginForm = screen.getByTestId("login-form");
-    expect(loginForm).toBeInTheDocument();
+  test("redirects from / to /login and renders login page", () => {
+    // Set the browser history to "/" before rendering
+    window.history.pushState({}, "Test page", "/");
+    render(<App />);
+    // Expect the login form to be rendered (e.g., "Welcome Back" heading)
+    const welcomeHeading = screen.getByText(/Welcome Back/i);
+    expect(welcomeHeading).toBeInTheDocument();
+  });
+
+  test("renders register page when navigating to /register", () => {
+    // Set the browser history to "/register" before rendering
+    window.history.pushState({}, "Test page", "/register");
+    render(<App />);
+    // Verify that the register form renders with the heading "Create Account"
+    const registerHeading = screen.getByText(/Create Account/i);
+    expect(registerHeading).toBeInTheDocument();
+    // Verify the presence of the login link ("Login Here")
+    const loginLink = screen.getByText(/Login Here/i);
+    expect(loginLink).toBeInTheDocument();
   });
 });
