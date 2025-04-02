@@ -7,7 +7,6 @@ import {
   Typography,
   TextField,
   Button,
-  Alert,
   Link,
   InputAdornment,
   CircularProgress,
@@ -16,11 +15,10 @@ import {
   FormControl,
   InputLabel
 } from '@mui/material';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
-import CloseIcon from '@mui/icons-material/Close';
 
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
@@ -35,13 +33,25 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate form fields before submission
+    if (!username || !email || !role || !password1 || !password2) {
+      addMessage('error', "Please fill in all fields");
+      return;
+    }
+
+    if (password1 !== password2) {
+      addMessage('error', "Passwords do not match");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       await register(username, email, role, password1, password2);
       addMessage('success', "Registration successful!");
       setTimeout(() => navigate("/login"), 1500);
     } catch (error) {
-      addMessage('error', error.message);
+      addMessage('error', error.message || "Registration failed");
     } finally {
       setIsSubmitting(false);
     }
@@ -71,7 +81,6 @@ const RegisterForm = () => {
         background: 'linear-gradient(135deg, #f0f4ff 0%, #a8dadc 100%)',
       }}
     >
-
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -103,6 +112,17 @@ const RegisterForm = () => {
             Create Account
           </Typography>
 
+          {messages.map((message) => (
+            <Typography
+              key={message.id}
+              color={message.type === 'success' ? 'green' : 'error'}
+              textAlign="center"
+              sx={{ mb: 2 }}
+            >
+              {message.text}
+            </Typography>
+          ))}
+
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -121,103 +141,85 @@ const RegisterForm = () => {
                 '& > *': { flex: 1 }
               }}
             >
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <TextField
-                  fullWidth
-                  label="Username"
-                  variant="outlined"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  margin="normal"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <PersonIcon color="primary" sx={{ fontSize: 24 }} />
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '12px',
-                      fontSize: '1rem',
-                      '&.Mui-focused fieldset': {
-                        borderWidth: 2,
-                        borderColor: 'primary.main',
-                      },
-                    },
-                    '& .MuiInputLabel-root': {
-                      fontSize: '1rem',
-                    }
-                  }}
-                />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <TextField
-                  fullWidth
-                  label="Email"
-                  variant="outlined"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  margin="normal"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <EmailIcon color="primary" sx={{ fontSize: 24 }} />
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '12px',
-                      fontSize: '1rem',
-                      '&.Mui-focused fieldset': {
-                        borderWidth: 2,
-                        borderColor: 'primary.main',
-                      },
-                    },
-                    '& .MuiInputLabel-root': {
-                      fontSize: '1rem',
-                    }
-                  }}
-                />
-              </motion.div>
-            </Box>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <FormControl fullWidth margin="normal">
-                <InputLabel sx={{ fontSize: '1rem' }}>Role</InputLabel>
-                <Select
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  label="Role"
-                  sx={{
+              <TextField
+                fullWidth
+                label="Username"
+                variant="outlined"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                margin="normal"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PersonIcon color="primary" sx={{ fontSize: 24 }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
                     borderRadius: '12px',
                     fontSize: '1rem',
-                    '& .MuiOutlinedInput-notchedOutline': {
+                    '&.Mui-focused fieldset': {
+                      borderWidth: 2,
                       borderColor: 'primary.main',
                     },
-                  }}
-                >
-                  <MenuItem value="" disabled>Select Role</MenuItem>
-                  <MenuItem value="student">Student</MenuItem>
-                  <MenuItem value="teacher">Teacher</MenuItem>
-                </Select>
-              </FormControl>
-            </motion.div>
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: '1rem',
+                  }
+                }}
+              />
+
+              <TextField
+                fullWidth
+                label="Email"
+                variant="outlined"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                margin="normal"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailIcon color="primary" sx={{ fontSize: 24 }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    '&.Mui-focused fieldset': {
+                      borderWidth: 2,
+                      borderColor: 'primary.main',
+                    },
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: '1rem',
+                  }
+                }}
+              />
+            </Box>
+
+            <FormControl fullWidth margin="normal">
+              <InputLabel sx={{ fontSize: '1rem' }}>Role</InputLabel>
+              <Select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                label="Role"
+                sx={{
+                  borderRadius: '12px',
+                  fontSize: '1rem',
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'primary.main',
+                  },
+                }}
+              >
+                <MenuItem value="" disabled>Select Role</MenuItem>
+                <MenuItem value="student">Student</MenuItem>
+                <MenuItem value="teacher">Teacher</MenuItem>
+              </Select>
+            </FormControl>
 
             <Box
               sx={{
@@ -226,119 +228,95 @@ const RegisterForm = () => {
                 '& > *': { flex: 1 }
               }}
             >
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                <TextField
-                  fullWidth
-                  label="Password"
-                  variant="outlined"
-                  type="password"
-                  value={password1}
-                  onChange={(e) => setPassword1(e.target.value)}
-                  margin="normal"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockIcon color="primary" sx={{ fontSize: 24 }} />
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '12px',
-                      fontSize: '1rem',
-                      '&.Mui-focused fieldset': {
-                        borderWidth: 2,
-                        borderColor: 'primary.main',
-                      },
+              <TextField
+                fullWidth
+                label="Password"
+                variant="outlined"
+                type="password"
+                value={password1}
+                onChange={(e) => setPassword1(e.target.value)}
+                margin="normal"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockIcon color="primary" sx={{ fontSize: 24 }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    '&.Mui-focused fieldset': {
+                      borderWidth: 2,
+                      borderColor: 'primary.main',
                     },
-                    '& .MuiInputLabel-root': {
-                      fontSize: '1rem',
-                    }
-                  }}
-                />
-              </motion.div>
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: '1rem',
+                  }
+                }}
+              />
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-              >
-                <TextField
-                  fullWidth
-                  label="Confirm Password"
-                  variant="outlined"
-                  type="password"
-                  value={password2}
-                  onChange={(e) => setPassword2(e.target.value)}
-                  margin="normal"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockIcon color="primary" sx={{ fontSize: 24 }} />
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '12px',
-                      fontSize: '1rem',
-                      '&.Mui-focused fieldset': {
-                        borderWidth: 2,
-                        borderColor: 'primary.main',
-                      },
+              <TextField
+                fullWidth
+                label="Confirm Password"
+                variant="outlined"
+                type="password"
+                value={password2}
+                onChange={(e) => setPassword2(e.target.value)}
+                margin="normal"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockIcon color="primary" sx={{ fontSize: 24 }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    '&.Mui-focused fieldset': {
+                      borderWidth: 2,
+                      borderColor: 'primary.main',
                     },
-                    '& .MuiInputLabel-root': {
-                      fontSize: '1rem',
-                    }
-                  }}
-                />
-              </motion.div>
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: '1rem',
+                  }
+                }}
+              />
             </Box>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              disabled={isSubmitting}
+              sx={{
+                mt: 2,
+                py: 1.5,
+                borderRadius: '12px',
+                fontSize: '1.1rem',
+                fontWeight: 700,
+                textTransform: 'none',
+                boxShadow: 3,
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow: 5,
+                  backgroundColor: 'primary.dark',
+                },
+                transition: 'all 0.3s ease',
+              }}
             >
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                disabled={isSubmitting}
-                sx={{
-                  mt: 2,
-                  py: 1.5,
-                  borderRadius: '12px',
-                  fontSize: '1.1rem',
-                  fontWeight: 700,
-                  textTransform: 'none',
-                  boxShadow: 3,
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: 5,
-                    backgroundColor: 'primary.dark',
-                  },
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                {isSubmitting ? (
-                  <CircularProgress size={24} color="inherit" />
-                ) : (
-                  'Register Now'
-                )}
-              </Button>
-            </motion.div>
-          </Box>
+              {isSubmitting ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                'Register Now'
+              )}
+            </Button>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-          >
             <Typography
               variant="body1"
               textAlign="center"
@@ -364,7 +342,7 @@ const RegisterForm = () => {
                 Login Here
               </Link>
             </Typography>
-          </motion.div>
+          </Box>
         </Paper>
       </motion.div>
     </Box>

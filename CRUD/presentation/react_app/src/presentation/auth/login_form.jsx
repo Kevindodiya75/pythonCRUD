@@ -111,6 +111,7 @@ const LoginForm = () => {
                   {message.text}
                 </Box>
                 <CloseIcon
+                  data-testid="close-icon"
                   sx={{
                     cursor: 'pointer',
                     ml: 1,
